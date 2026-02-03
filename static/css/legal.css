@@ -1,0 +1,308 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: LEGAL Y DOCUMENTACIÓN (LEGAL.CSS)
+   ==========================================================================
+   Descripción: Estilos para páginas de texto denso (Aviso Legal, Privacidad).
+   Implementa un diseño de "Documentación Técnica" con índice lateral adhesivo.
+   Dependencias: layout.css (variables globales)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. COMPORTAMIENTO GLOBAL
+   -------------------------------------------------------------------------- */
+
+html {
+    /* Permite que los enlaces del índice (#intro, #contact) se deslicen suavemente */
+    scroll-behavior: smooth;
+}
+
+/* --------------------------------------------------------------------------
+   2. SECCIÓN HERO (ENCABEZADO COMPARTIDO)
+   -------------------------------------------------------------------------- */
+/* Nota: Estos estilos están homologados con about.css y contact.css */
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-radius: 20px;
+    min-height: 200px;
+    padding: 40px;
+    
+    /* Flexbox para alineación */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    
+    color: white;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+}
+
+/* Fondo animado (Círculo Radial) */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 800px;
+}
+
+.about-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.about-subtitle {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-decoration {
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------
+   3. LAYOUT DE DOCUMENTACIÓN (GRID PRINCIPAL)
+   -------------------------------------------------------------------------- */
+
+.legal-layout {
+    display: grid;
+    /* Columna 1: Índice fijo (300px) | Columna 2: Contenido fluido (1fr) */
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+    align-items: start; /* Alineación superior para permitir sticky */
+}
+
+/* --------------------------------------------------------------------------
+   4. BARRA LATERAL (TABLA DE CONTENIDOS)
+   -------------------------------------------------------------------------- */
+
+.legal-sidebar {
+    /* Sticky: Se queda fija al hacer scroll vertical */
+    position: sticky;
+    top: 100px; /* Distancia desde el borde superior */
+    /* FIX: Scroll interno para pantallas pequeñas */
+    max-height: calc(100vh - 120px); 
+    overflow-y: auto;
+}
+
+.toc-card {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.toc-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #F1F5F9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.toc-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Enlaces del Índice */
+.toc-link {
+    color: #64748B;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    
+    /* Borde izquierdo transparente para animación */
+    border-left: 3px solid transparent;
+}
+
+.toc-link:hover {
+    background: #F8FAFC;
+    color: #3B82F6;
+    border-left-color: #3B82F6; /* Indicador visual azul */
+}
+
+/* Enlace activo o destacado */
+.highlight-link {
+    color: #3B82F6;
+    font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   5. CONTENIDO LEGAL (CUERPO DEL DOCUMENTO)
+   -------------------------------------------------------------------------- */
+
+.legal-content {
+    background: white;
+    border-radius: 24px;
+    padding: 50px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+/* Secciones individuales del documento */
+.legal-section {
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #F1F5F9;
+    
+    /* FIX: Compensación para el Header Fijo al navegar */
+    scroll-margin-top: 100px;
+}
+
+.legal-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* Cabecera de cada artículo/sección */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+/* Caja de icono decorativo */
+.icon-box {
+    width: 40px;
+    height: 40px;
+    background: #EFF6FF;
+    color: #3B82F6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.legal-section h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0;
+}
+
+.legal-section p {
+    color: #475569;
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* Listas personalizadas dentro del texto legal */
+.legal-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.legal-list li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+    color: #475569;
+}
+
+/* Viñeta personalizada */
+.legal-list li::before {
+    content: '•';
+    color: #3B82F6; /* Azul corporativo */
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. SECCIONES DESTACADAS Y PIE
+   -------------------------------------------------------------------------- */
+
+/* Caja de resaltado (Ej: Relación con IEPROES) */
+.highlight-section {
+    background: #F8FAFC;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px dashed #CBD5E1;
+}
+
+.highlight-section .icon-box {
+    background: #1E293B; /* Fondo oscuro para contraste */
+    color: white;
+}
+
+/* Bloque de fecha de actualización */
+.last-updated {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #E2E8F0;
+    text-align: right;
+    color: #94A3B8;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   7. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    /* Grid colapsa a una sola columna */
+    .legal-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* La barra lateral pierde su posición "sticky" y queda arriba */
+    .legal-sidebar {
+        position: static;
+        margin-bottom: 30px;
+    }
+
+    /* Ajuste de padding en contenido */
+    .legal-content {
+        padding: 30px;
+    }
+}

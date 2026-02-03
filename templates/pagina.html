@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/generic.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="generic-card">
+
+    <h1 class="generic-title">{{ titulo }}</h1>
+
+    <div class="generic-body">
+
+        {% if tipo == 'nosotros' %}
+        <p>Bienvenidos a Nexus Ciencia, un repositorio académico dedicado a la divulgación de...</p>
+        <p>[Aquí puedes redactar el texto sobre la misión del sitio]</p>
+
+        {% elif tipo == 'contacto' %}
+        <p>Para reportar errores, sugerencias o contacto académico:</p>
+        <p><strong>Email:</strong> admin@nexusciencia.com</p>
+
+        {% elif tipo == 'solicitar' %}
+        <p>¿No encuentras el tema que buscas?</p>
+        <p>Envíanos tu sugerencia y nuestro equipo académico evaluará su inclusión en el repositorio.</p>
+        <br>
+        <a href="mailto:admin@nexusciencia.com?subject=Solicitud de Artículo" class="btn-generic-action">
+            Enviar Solicitud por Correo
+        </a>
+        {% else %}
+        <p>Página en construcción. Próximamente disponible.</p>
+        {% endif %}
+
+    </div>
+
+    <div class="generic-footer">
+        <a href="/" class="link-back">← Volver al Dashboard</a>
+    </div>
+
+</div>
+
+{% endblock %}

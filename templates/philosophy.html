@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/philosophy.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Nuestra Filosofía</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="mv-container">
+
+    <div class="mv-card">
+        <div class="mv-icon">🚀</div>
+        <h2>Nuestra Misión</h2>
+        <p>
+            Facilitar el acceso universal a recursos académicos de alta calidad, democratizando el conocimiento en
+            neurociencia y psicología para estudiantes e investigadores de habla hispana.
+        </p>
+    </div>
+
+    <div class="mv-card">
+        <div class="mv-icon">👁️</div>
+        <h2>Nuestra Visión</h2>
+        <p>
+            Ser el referente digital líder en documentación científica abierta, construyendo un puente sólido entre la
+            investigación académica rigurosa y la sociedad global.
+        </p>
+    </div>
+
+</div>
+
+<div class="values-section">
+
+    <h3 class="section-title">Valores Nucleares</h3>
+
+    <div class="values-grid">
+
+        <div class="value-item">
+            <div class="val-check">✓</div>
+            <div>
+                <h4>Rigor Académico</h4>
+                <p>Verificación constante de fuentes.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <div class="val-check">✓</div>
+            <div>
+                <h4>Acceso Abierto</h4>
+                <p>El conocimiento no tiene dueños.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <div class="val-check">✓</div>
+            <div>
+                <h4>Neutralidad</h4>
+                <p>Ciencia libre de sesgos políticos.</p>
+            </div>
+        </div>
+
+        <div class="value-item">
+            <div class="val-check">✓</div>
+            <div>
+                <h4>Innovación</h4>
+                <p>Tecnología al servicio de la educación.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

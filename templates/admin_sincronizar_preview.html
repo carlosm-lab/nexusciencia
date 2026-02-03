@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Sincronizar - Admin{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <svg width="24" height="24" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        Vista Previa de Sincronización
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if huerfanos %}
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Atención:</strong> Se encontraron <strong>{{ huerfanos|length }}</strong> artículo(s) sin archivo HTML correspondiente.
+                        </div>
+                        
+                        <p class="text-muted">Los siguientes artículos serán <strong>archivados</strong> (soft delete). Podrás restaurarlos posteriormente desde el panel de administración si es necesario.</p>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Título</th>
+                                        <th>Slug</th>
+                                        <th>Archivo</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for art in huerfanos %}
+                                    <tr>
+                                        <td>{{ art.id }}</td>
+                                        <td>{{ art.titulo }}</td>
+                                        <td><code>{{ art.slug }}</code></td>
+                                        <td><code>{{ art.nombre_archivo }}</code></td>
+                                        <td>{{ art.fecha.strftime('%Y-%m-%d') }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="mt-4 d-flex gap-2">
+                            <form method="POST" action="{{ url_for('admin.admin_sincronizar') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-danger">
+                                    <svg width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                    </svg>
+                                    Archivar {{ huerfanos|length }} Artículo(s)
+                                </button>
+                            </form>
+                            <a href="{{ url_for('admin.admin') }}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success" role="alert">
+                            <svg width="24" height="24" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                            <strong>¡Todo en orden!</strong> Todos los artículos tienen sus archivos HTML correspondientes. No hay nada que sincronizar.
+                        </p>
+                        <a href="{{ url_for('admin.admin') }}" class="btn btn-primary mt-3">Volver al Panel Admin</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}Repositorio de Fuentes Académicas | NexusCiencia{% endblock %}
+
+{% block description %}Accede a {{ total_fuentes }}+ papers científicos originales de PubMed, Scopus, ScienceDirect y
+APA. Fuentes primarias verificadas para investigadores y profesionales de la psicología.{% endblock %}
+
+{% block styles %}
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'system-ui', 'sans-serif'],
+                },
+                colors: {
+                    primary: {
+                        50: '#eef2ff',
+                        100: '#e0e7ff',
+                        500: '#6366f1',
+                        600: '#4f46e5',
+                        700: '#4338ca',
+                    },
+                    secondary: {
+                        400: '#2dd4bf',
+                        500: '#14b8a6',
+                    },
+                }
+            },
+        },
+    }
+</script>
+<style>
+    /* Full Bleed Override */
+    .page-content {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Mesh Gradient Background */
+    .hero-mesh {
+        background:
+            radial-gradient(at 27% 37%, rgba(124, 58, 237, 0.08) 0px, transparent 50%),
+            radial-gradient(at 97% 21%, rgba(6, 182, 212, 0.06) 0px, transparent 50%),
+            radial-gradient(at 10% 29%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+    }
+
+    /* Source badge colors */
+    .badge-pubmed {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .badge-scopus {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .badge-sciencedirect {
+        background: #fce7f3;
+        color: #9d174d;
+    }
+
+    .badge-apa {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    /* Row hover effect */
+    .source-row {
+        transition: all 0.2s ease;
+    }
+
+    .source-row:hover {
+        background: rgba(99, 102, 241, 0.04);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen font-sans">
+
+    <!-- ===== HERO SECTION - COMPACT ===== -->
+    <section class="hero-mesh px-4 pt-16 pb-12 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-5xl">
+
+            <!-- Badge -->
+            <div
+                class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white/70 backdrop-blur-sm px-4 py-2 text-sm">
+                <svg class="h-4 w-4 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span class="font-semibold text-slate-700">{{ total_fuentes }} Papers Disponibles</span>
+            </div>
+
+            <!-- H1 -->
+            <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                Repositorio de Fuentes
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg text-slate-600 leading-relaxed">
+                Papers académicos originales de las principales bases de datos científicas.
+                Fuentes primarias <span class="font-medium text-slate-800">peer-reviewed</span> para tu investigación.
+            </p>
+
+            <!-- Filter pills (future feature) -->
+            <div class="mt-8 flex flex-wrap gap-2">
+                <button
+                    class="rounded-full bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800">
+                    Todos
+                </button>
+                <button
+                    class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-primary-300 hover:text-primary-700">
+                    PubMed
+                </button>
+                <button
+                    class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-primary-300 hover:text-primary-700">
+                    Scopus
+                </button>
+                <button
+                    class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-primary-300 hover:text-primary-700">
+                    ScienceDirect
+                </button>
+                <button
+                    class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-primary-300 hover:text-primary-700">
+                    APA PsycNet
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TABLA DE FUENTES (LISTA COMPACTA) ===== -->
+    <section class="px-4 py-8 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-5xl">
+
+            <!-- Table Header -->
+            <div
+                class="hidden sm:grid sm:grid-cols-12 gap-4 px-6 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                <div class="col-span-6">Título / Autor</div>
+                <div class="col-span-2 text-center">Fuente</div>
+                <div class="col-span-2 text-center">Año</div>
+                <div class="col-span-2 text-right">Acción</div>
+            </div>
+
+            <!-- Source List -->
+            <div class="divide-y divide-slate-100">
+                {% for fuente in fuentes %}
+                <div class="source-row grid grid-cols-1 sm:grid-cols-12 gap-4 items-center px-6 py-5 rounded-lg">
+
+                    <!-- Icon + Title + Author -->
+                    <div class="sm:col-span-6 flex items-start gap-4">
+                        <!-- File Type Icon -->
+                        <div class="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br 
+                            {% if fuente.tipo == 'PDF' %}from-red-500 to-red-600{% else %}from-blue-500 to-blue-600{% endif %} 
+                            flex items-center justify-center shadow-sm">
+                            {% if fuente.tipo == 'PDF' %}
+                            <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                            </svg>
+                            {% else %}
+                            <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                            {% endif %}
+                        </div>
+
+                        <!-- Title + Author -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-base font-semibold text-slate-900 leading-tight line-clamp-2">
+                                {{ fuente.titulo }}
+                            </h3>
+                            <p class="mt-1 text-sm text-slate-500 truncate">
+                                {{ fuente.autor }}
+                            </p>
+                            <p class="mt-1 text-xs text-slate-400 font-mono">
+                                DOI: {{ fuente.doi }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Source Badge -->
+                    <div class="sm:col-span-2 flex sm:justify-center">
+                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
+                            {% if fuente.fuente == 'PubMed' %}badge-pubmed
+                            {% elif fuente.fuente == 'Scopus' %}badge-scopus
+                            {% elif fuente.fuente == 'ScienceDirect' %}badge-sciencedirect
+                            {% else %}badge-apa{% endif %}">
+                            {{ fuente.fuente }}
+                        </span>
+                    </div>
+
+                    <!-- Year -->
+                    <div class="sm:col-span-2 text-sm font-medium text-slate-600 sm:text-center">
+                        <span class="sm:hidden text-slate-400">Año: </span>{{ fuente.año }}
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="sm:col-span-2 flex sm:justify-end">
+                        <a href="{{ fuente.url }}"
+                            class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-primary-300 hover:text-primary-700">
+                            {% if fuente.tipo == 'PDF' %}
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Descargar
+                            {% else %}
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                            Ver DOI
+                            {% endif %}
+                        </a>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Load More -->
+            <div class="mt-8 text-center">
+                <button
+                    class="inline-flex items-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-700 shadow-sm transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700">
+                    Cargar más fuentes
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== INFO SECTION ===== -->
+    <section class="px-4 py-16 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent to-slate-100/50">
+        <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-2xl font-bold text-slate-900">¿Necesitas una fuente específica?</h2>
+            <p class="mt-4 text-slate-600">
+                Si no encuentras el paper que buscas, solicítalo y lo añadiremos a la biblioteca.
+            </p>
+            <a href="/info/contacto"
+                class="mt-6 inline-flex items-center gap-2 text-primary-600 font-semibold hover:text-primary-700 transition">
+                Solicitar fuente
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

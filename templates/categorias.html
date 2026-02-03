@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorías | NexusCiencia{% endblock %}
+
+{% block description %}Explora las {{ total_categorias }} áreas de estudio en psicología disponibles en NexusCiencia.
+Encuentra artículos científicos organizados por categoría.{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block header_title %}
+{% if request.args.get('q') %}
+<div class="header-category-title">{{ request.args.get('q') }}</div>
+{% else %}
+<div class="header-category-title">Categorías</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if request.args.get('q') %}
+
+<!-- H1 accesible para SEO (Auditoría 3.5) -->
+<h1 class="visually-hidden">Resultados de búsqueda: {{ request.args.get('q') }}</h1>
+
+<p class="search-results-info">
+    Se encontraron <strong>{{ articulos_recientes|length }}</strong> artículos en esta sección.
+</p>
+
+<div class="library-grid">
+    {% for art in articulos_recientes %}
+    <div class="book-card">
+
+        <a href="{{ url_for('main.ver_articulo', cat_slug=get_category_slug(art.categoria), slug=art.slug) }}"
+            class="book-cover-link">
+            <div class="book-cover {{ loop.cycle('cover-blue', 'cover-purple', 'cover-dark', 'cover-green') }}">
+                <span class="read-hint">Clic para leer</span>
+                <svg class="card-decoration-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg>
+                <div class="book-title">{{ art.titulo }}</div>
+            </div>
+        </a>
+
+        <div class="book-actions">
+            <div class="actions-default" id="actions-{{ art.id }}">
+
+                <button type="button"
+                    class="btn-book-action btn-save-card {% if art.id in ids_guardados %}saved{% endif %}"
+                    title="Guardar" data-id="{{ art.id }}" data-available="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                        fill="{% if art.id in ids_guardados %}currentColor{% else %}none{% endif %}"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+
+                <button type="button" class="btn-book-action action-play" title="Escuchar Podcast"
+                    onclick="playCardAudio('{{ art.id }}')" data-available="{{ 'true' if art.url_audio else 'false' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+
+                <a href="{{ art.url_pdf if art.url_pdf else 'javascript:void(0);' }}" target="_blank"
+                    class="btn-book-action action-pdf" title="Descargar PDF"
+                    data-available="{{ 'true' if art.url_pdf else 'false' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+
+            </div>
+
+            {% if art.url_audio %}
+            <audio id="audio-{{ art.id }}" style="display: none;" preload="none">
+                <source src="{{ art.url_audio }}" type="audio/mpeg">
+            </audio>
+            <div class="actions-player hidden" id="player-wrapper-{{ art.id }}">
+                <button type="button" class="btn-book-action" title="Reiniciar" onclick="rewindAudio('{{ art.id }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                        <line x1="5" y1="19" x2="5" y2="5"></line>
+                    </svg>
+                </button>
+                <button type="button" class="btn-book-action action-stop-custom" title="Pausar"
+                    onclick="stopCardAudio('{{ art.id }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                </button>
+                <button type="button" class="btn-book-action" title="+10s" onclick="forwardAudio('{{ art.id }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                        <line x1="19" y1="5" x2="19" y2="19"></line>
+                    </svg>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    {# Estado vacío mejorado #}
+    {% set empty_title = 'No se encontraron resultados' %}
+    {% set empty_text = 'Intenta con otro término de búsqueda o explora nuestras categorías.' %}
+    {% set empty_action_url = url_for('main.categorias') %}
+    {% set empty_action_text = 'Ver todas las categorías' %}
+    {% include 'components/empty_state.html' %}
+    {% endfor %}
+</div>
+
+{% else %}
+
+<!-- H1 accesible para SEO (Auditoría 3.5) -->
+<h1 class="visually-hidden">Categorías de Psicología Científica - NexusCiencia</h1>
+
+<div class="d-block d-md-none mobile-search-container">
+    <form action="{{ url_for('main.categorias') }}" method="get" class="mobile-search-form">
+        <input type="text" name="q" placeholder="¿Qué quieres aprender hoy?" class="mobile-search-input">
+        <svg class="mobile-search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+    </form>
+</div>
+
+<div class="section-header">
+    <h3 class="section-title">Explorar Categorías</h3>
+    <span class="section-badge">A-Z</span>
+</div>
+
+<div class="modules-grid">
+    {% for cat in todas_las_categorias %}
+    <a href="{{ url_for('main.ver_categoria', slug=categorias_slugs[cat]) }}" class="module-card">
+        <div class="card-content">
+            <div class="module-icon {{ loop.cycle('mod-purple', 'mod-red', 'mod-blue', 'mod-orange', 'mod-green') }}">
+                {{ cat[0] }}
+            </div>
+            <div class="module-text">
+                <div class="module-title">{{ cat[2:] }}</div>
+                <div class="module-desc">Ver colección</div>
+            </div>
+        </div>
+        <div class="card-footer-line"></div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="latest-publications-section">
+    <h3 class="latest-publications-title">Últimas Publicaciones</h3>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 management-table publications-table">
+                <thead class="publications-thead">
+                    <tr>
+                        <th class="publications-th">Título del Artículo</th>
+                        <th class="publications-th">Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for art in articulos_recientes %}
+                    <tr class="article-row">
+                        <td class="article-title-cell">
+                            <a href="{{ url_for('main.ver_articulo', cat_slug=get_category_slug(art.categoria), slug=art.slug) }}"
+                                class="article-link">
+                                <strong class="article-title">{{ art.titulo }}</strong>
+                                <div class="article-category-wrapper">
+                                    <span class="article-category-badge">{{ art.categoria }}</span>
+                                </div>
+                            </a>
+                        </td>
+                        <td class="article-date-cell">
+                            {{ art.fecha.strftime('%d/%m/%Y') }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center py-4 text-muted">Sin artículos recientes.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{# Paginación usando componente reutilizable #}
+{% set pagination_obj = articulos_pag %}
+{% include 'components/pagination.html' %}
+
+{% endif %}
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Categorías de Psicología",
+    "description": "Explora {{ total_categorias }} áreas de estudio en psicología científica disponibles en NexusCiencia",
+    "url": "{{ request.url_root.rstrip('/') }}{{ url_for('main.categorias') }}",
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "{{ request.url_root.rstrip('/') }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Categorías"
+            }
+        ]
+    }
+}
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

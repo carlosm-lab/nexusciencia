@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="editor-wrapper-centered">
+
+    <div class="editor-card">
+
+        <div class="editor-header">
+            <h1 class="editor-title">Editar Artículo</h1>
+            <p class="editor-subtitle">Modificando: <strong>{{ articulo.titulo }}</strong></p>
+        </div>
+
+        <form action="{{ url_for('admin.admin_editar', id=articulo.id) }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="editor-section">
+
+                <div class="form-group">
+                    <label class="admin-label">Título Académico</label>
+                    <input type="text" name="titulo" class="admin-input" value="{{ articulo.titulo }}" required>
+                </div>
+
+                <div class="form-grid-2">
+                    <div>
+                        <label class="admin-label">Slug (URL)</label>
+                        <input type="text" name="slug" class="admin-input" value="{{ articulo.slug }}" required>
+                        <small class="input-help">⚠️ Cambiar esto afectará enlaces externos.</small>
+                    </div>
+                    <div>
+                        <label class="admin-label">Categoría</label>
+                        <select name="categoria" class="admin-select" required>
+                            {% for cat in todas_las_categorias %}
+                            <option value="{{ cat }}" {% if cat==articulo.categoria %}selected{% endif %}>
+                                {{ cat }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="admin-label">Etiquetas (Separadas por comas)</label>
+                    <input type="text" name="tags" class="admin-input" value="{{ articulo.tags }}">
+                </div>
+            </div>
+
+            <div class="files-management-section">
+                <h4 class="files-title">Gestión de Archivos Físicos</h4>
+                <p class="files-desc">Sube archivos nuevos solo si deseas reemplazar el contenido actual.</p>
+
+                <div class="files-grid">
+
+                    <div class="file-item">
+                        <span class="current-file-label">Actual: {{ articulo.nombre_archivo }}</span>
+                        <input type="file" name="html_file" id="html-upload" class="hidden-file-input" accept=".html">
+                        <label for="html-upload" class="btn-file-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="18" x2="12" y2="12"></line>
+                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                            </svg>
+                            Reemplazar HTML
+                        </label>
+                    </div>
+
+                    <div class="file-item">
+                        <span class="current-file-label">Estilos CSS (Opcional)</span>
+                        <input type="file" name="css_file" id="css-upload" class="hidden-file-input" accept=".css">
+                        <label for="css-upload" class="btn-file-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            Subir CSS
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="editor-footer">
+                <a href="/admin" class="btn-cancel-ghost">Cancelar</a>
+                <button type="submit" class="btn-save-primary">Guardar Cambios</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

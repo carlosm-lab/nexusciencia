@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}Nexus Ciencia | Repositorio Científico de Psicología{% endblock %}</title>
+    <meta name="description"
+        content="{% block description %}Repositorio científico de artículos de psicología. Explora contenido académico de calidad sobre psicología clínica, neurociencia, comportamiento y salud mental.{% endblock %}">
+    <meta name="keywords"
+        content="psicología, neurociencia, artículos científicos, investigación, salud mental, comportamiento humano">
+    <meta name="author" content="Nexus Ciencia">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+    <meta property="og:title" content="{% block og_title %}Nexus Ciencia | Repositorio Científico{% endblock %}">
+    <meta property="og:description"
+        content="{% block og_description %}Repositorio de artículos científicos de psicología{% endblock %}">
+    <meta property="og:site_name" content="Nexus Ciencia">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:image"
+        content="{% block og_image %}{{ url_for('static', filename='img/og-default.png', _external=True) }}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt"
+        content="{% block og_image_alt %}Nexus Ciencia - Repositorio Científico de Psicología{% endblock %}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title"
+        content="{% block twitter_title %}Nexus Ciencia | Repositorio Científico de Psicología{% endblock %}">
+    <meta name="twitter:description"
+        content="{% block twitter_description %}Artículos científicos de psicología de calidad académica{% endblock %}">
+    <meta name="twitter:image"
+        content="{% block twitter_image %}{{ url_for('static', filename='img/og-default.png', _external=True) }}{% endblock %}">
+
+    <!-- CSRF Token for JavaScript -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="msapplication-TileColor" content="#0F172A">
+
+    <!-- Preconnect para CDNs y fuentes (mejora de performance LCP) -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Google Fonts - Inter (carga optimizada via link, no @import) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Canonical URL (sin parámetros de query para evitar duplicación) -->
+    <link rel="canonical" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+
+    <!-- Favicons y PWA -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- Bootstrap con SRI -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <!-- Flask-Assets CSS Bundle (incluye variables, layout, components, dark-mode) -->
+    {% assets "css_all" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+
+    {% block styles %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Skip link for keyboard accessibility (WCAG 2.1) -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <div id="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+
+        <div class="sidebar-header">
+            <div class="brand-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                    stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg>
+                <span class="brand-text">NEXUS CIENCIA</span>
+            </div>
+            <button id="sidebar-toggle" class="sidebar-toggle-btn" aria-label="Alternar menú lateral">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="sidebar-profile-section">
+            {% if session.get('user_email') %}
+            <div class="profile-content">
+                <img src="{{ session.get('user_picture') | e }}" class="profile-avatar"
+                    alt="Avatar de {{ session.get('user_name', 'usuario') | e }}">
+                <div class="profile-info">
+                    <div class="profile-name">{{ session.get('user_name') }}</div>
+                    <div class="profile-role">
+                        {% if es_admin %}Administrador{% else %}Lector{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="profile-content">
+                <div class="profile-avatar-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">Invitado</div>
+                    <div class="profile-role">Sin acceso</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <nav class="sidebar-menu">
+            <div class="menu-category">PRINCIPAL</div>
+
+            <a href="{{ url_for('main.inicio') }}"
+                class="menu-item {% if request.endpoint == 'main.inicio' and not request.args.get('q') %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span class="link-text">Inicio</span>
+            </a>
+
+            <a href="{{ url_for('main.categorias') }}"
+                class="menu-item {% if request.endpoint in ['main.categorias', 'main.ver_categoria'] %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span class="link-text">Categorías</span>
+            </a>
+
+            <a href="{{ url_for('main.repositorio_fuentes') }}"
+                class="menu-item {% if request.endpoint == 'main.repositorio_fuentes' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span class="link-text">Fuentes Académicas</span>
+            </a>
+
+            <a href="{{ url_for('main.casos_clinicos') }}"
+                class="menu-item {% if request.endpoint == 'main.casos_clinicos' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="link-text">Casos Clínicos</span>
+            </a>
+
+            {% if session.get('user_email') and not es_admin %}
+            <a href="{{ url_for('perfil.perfil') }}"
+                class="menu-item {% if request.endpoint == 'perfil.perfil' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="link-text">Mi Biblioteca</span>
+            </a>
+            {% endif %}
+
+            {% if not session.get('user_email') %}
+            <a href="{{ url_for('auth.login') }}" class="menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <span class="link-text">Iniciar Sesión</span>
+            </a>
+            {% endif %}
+
+            {% if es_admin %}
+            <a href="{{ url_for('admin.admin') }}"
+                class="menu-item menu-item-admin {% if request.endpoint == 'admin.admin' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <span class="link-text">Panel de Subida</span>
+            </a>
+            {% endif %}
+
+            <div class="menu-category">INSTITUCIONAL</div>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='nosotros') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'nosotros' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span class="link-text">Sobre Nosotros</span>
+            </a>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='filosofia') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'filosofia' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                <span class="link-text">Filosofía</span>
+            </a>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='politica') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'politica' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span class="link-text">Política Privacidad</span>
+            </a>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'contacto' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span class="link-text">Contacto</span>
+            </a>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='legal') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'legal' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span class="link-text">Aviso Legal</span>
+            </a>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='editorial') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'editorial' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                <span class="link-text">Política Editorial</span>
+            </a>
+
+            <div class="menu-category">COMUNIDAD</div>
+            <a href="{{ url_for('pages.pagina_estatica', pagina='solicitar') }}"
+                class="menu-item {% if request.view_args and request.view_args.get('pagina') == 'solicitar' %}active{% endif %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"></path>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+                <span class="link-text">Solicitar Artículo</span>
+            </a>
+        </nav>
+
+        <!-- Sidebar footer removido - Dark Mode y Logout movidos a perfil/admin -->
+    </aside>
+
+    <main class="main-content" role="main" id="main-content">
+
+        <header class="top-header">
+            <div class="header-content">
+
+                <button id="mobile-toggle" class="sidebar-toggle-btn mobile-toggle-btn d-lg-none"
+                    aria-label="Abrir menú de navegación">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+
+                <div class="header-brand-dynamic">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                        </path>
+                    </svg>
+                    <span class="header-brand-text">NEXUS CIENCIA</span>
+                </div>
+
+                {% if request.endpoint in ['main.inicio', 'main.categorias', 'main.ver_categoria', 'perfil.perfil',
+                'admin.admin'] %}
+                <form action="{{ url_for('main.categorias') }}" method="get"
+                    class="search-container-premium d-none d-md-flex" role="search" aria-label="Buscar artículos">
+                    <div class="search-icon-wrapper" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <label for="search-input" class="visually-hidden">Buscar artículos</label>
+                    <input type="text" id="search-input" name="q" placeholder="Buscar artículo, tema..."
+                        autocomplete="off" aria-describedby="search-hint">
+                    <span id="search-hint" class="visually-hidden">Presiona Enter para buscar o Ctrl+K para
+                        enfocar</span>
+                    <button type="submit" class="search-btn-inside">Buscar</button>
+                </form>
+                {% endif %}
+            </div>
+        </header>
+
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <!-- Fallback local para Bootstrap si CDN falla -->
+    <script>
+        if (typeof bootstrap === 'undefined') {
+            var s = document.createElement('script');
+            s.src = '{{ url_for("static", filename="js/bootstrap.bundle.min.js") }}';
+            document.body.appendChild(s);
+            console.warn('Bootstrap CDN failed, using local fallback');
+        }
+    </script>
+    <script id="app-config" data-toast-duration="{{ config.TOAST_DURATION_MS }}"></script>
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

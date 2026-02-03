@@ -1,0 +1,36 @@
+{# Componente de estado vacío reutilizable #}
+{# Uso: {% include 'components/empty_state.html' %} #}
+{# Variables opcionales: empty_icon, empty_title, empty_text, empty_action_url, empty_action_text #}
+
+<div class="empty-state" role="status" aria-label="Sin resultados">
+    <div class="empty-state-icon">
+        {% if empty_icon %}
+        {{ empty_icon|safe }}
+        {% else %}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        {% endif %}
+    </div>
+
+    <h4 class="empty-state-title">
+        {{ empty_title|default('No se encontraron resultados') }}
+    </h4>
+
+    <p class="empty-state-text">
+        {{ empty_text|default('Intenta con otro término de búsqueda o explora nuestras categorías.') }}
+    </p>
+
+    {% if empty_action_url %}
+    <a href="{{ empty_action_url }}" class="empty-state-action">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+        {{ empty_action_text|default('Explorar contenido') }}
+    </a>
+    {% endif %}
+</div>

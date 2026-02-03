@@ -1,0 +1,234 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: PÁGINAS DE ERROR (ERROR.CSS)
+   ==========================================================================
+   Descripción: Estilos centralizados para páginas 404, 500 y similares.
+   Dependencias: variables.css
+   ========================================================================== */
+
+/* Contenedor Centrado */
+.error-container {
+    text-align: center;
+    padding: 80px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Icono Grande (Emoji) */
+.error-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    /* Animación sutil de flotación */
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Título Principal */
+.error-title {
+    font-weight: 800;
+    color: var(--text-primary);
+    /* Uso de variable global */
+    margin-bottom: 15px;
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+}
+
+/* Texto Descriptivo */
+.error-description {
+    color: var(--text-secondary);
+    /* Uso de variable global */
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+}
+
+/* Botón de Acción */
+.btn-error-primary {
+    display: inline-block;
+    background: var(--accent);
+    /* Azul Corporativo */
+    color: white;
+    padding: 12px 30px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+
+    /* Sombra suave */
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-error-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+    color: white;
+}
+
+/* Animación Decorativa */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Botón Secundario (Gris Oscuro - Usado en Error 500) */
+.btn-error-secondary {
+    display: inline-block;
+    background: #374151;
+    /* Gris Oscuro (Cool Gray 700) */
+    color: white;
+    padding: 12px 30px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 600;
+
+    /* Sin sombra por defecto para diferenciar prioridad */
+    transition: all 0.2s ease;
+}
+
+.btn-error-secondary:hover {
+    background: #111827;
+    /* Casi negro al hover */
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   NUEVOS ESTILOS PARA PÁGINAS MEJORADAS
+   ========================================================================== */
+
+/* Ilustración SVG */
+.error-illustration {
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.error-illustration.error-500 svg {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* Código de Error Grande */
+.error-code {
+    font-size: 6rem;
+    font-weight: 900;
+    color: var(--accent);
+    margin: 0;
+    letter-spacing: -4px;
+    line-height: 1;
+}
+
+.error-code-500 {
+    color: var(--danger);
+}
+
+/* Grid de Acciones */
+.error-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.error-actions .btn-error-primary,
+.error-actions .btn-error-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-error-secondary {
+    background: #374151;
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Sección de Sugerencias */
+.error-suggestions {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.suggestions-title {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.suggestions-list a {
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.suggestions-list a:hover {
+    text-decoration: underline;
+}
+
+/* Sección de Contacto */
+.error-contact {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.contact-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.contact-link:hover {
+    text-decoration: underline;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .error-suggestions {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .error-contact {
+    border-color: rgba(255, 255, 255, 0.1);
+}

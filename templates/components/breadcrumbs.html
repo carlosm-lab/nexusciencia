@@ -1,0 +1,71 @@
+{# Componente de breadcrumbs reutilizable #}
+{# Uso: {% include 'components/breadcrumbs.html' %} #}
+{# Variables: breadcrumb_items = [{'name': 'Nombre', 'url': '/path' or None}] #}
+
+{% if breadcrumb_items %}
+<nav class="breadcrumb-nav" aria-label="Navegación de migas de pan">
+    <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+        {% for item in breadcrumb_items %}
+        <li class="breadcrumb-item {% if loop.last %}active{% endif %}" itemprop="itemListElement" itemscope
+            itemtype="https://schema.org/ListItem">
+            {% if item.url and not loop.last %}
+            <a href="{{ item.url }}" itemprop="item">
+                <span itemprop="name">{{ item.name }}</span>
+            </a>
+            {% else %}
+            <span itemprop="name">{{ item.name }}</span>
+            {% endif %}
+            <meta itemprop="position" content="{{ loop.index }}">
+            {% if not loop.last %}
+            <span class="breadcrumb-separator" aria-hidden="true">›</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</nav>
+
+<style>
+    .breadcrumb-nav {
+        margin-bottom: 1.5rem;
+    }
+
+    .breadcrumb-list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.875rem;
+    }
+
+    .breadcrumb-item {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--text-tertiary, #64748B);
+    }
+
+    .breadcrumb-item a {
+        color: var(--accent-color, #3B82F6);
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .breadcrumb-item a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+    }
+
+    .breadcrumb-item.active {
+        color: var(--text-primary, #1E293B);
+        font-weight: 500;
+    }
+
+    .breadcrumb-separator {
+        color: var(--text-muted, #94A3B8);
+        margin: 0 0.25rem;
+    }
+</style>
+{% endif %}

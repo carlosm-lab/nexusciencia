@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Política de Privacidad | NexusCiencia{% endblock %}
+{% block description %}Conoce cómo NexusCiencia protege tu información personal. Política de privacidad, uso de datos,
+cookies y servicios de Google OAuth.{% endblock %}
+{% block og_title %}Política de Privacidad | NexusCiencia{% endblock %}
+{% block og_description %}Información sobre privacidad, protección de datos y uso de cookies en NexusCiencia.{% endblock
+%}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/privacy.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Política de Privacidad</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="legal-container">
+
+    <div class="last-updated">
+        <span class="update-badge">Última actualización: Noviembre 2025</span>
+    </div>
+
+    <div class="legal-card">
+        <h2 class="legal-heading">1. Introducción</h2>
+        <p>
+            Bienvenido a <strong>Nexus Ciencia</strong>. Nos comprometemos a proteger tu información personal y tu
+            derecho a la privacidad. Si tienes alguna pregunta o inquietud sobre nuestra política o nuestras prácticas
+            con respecto a tu información personal, contáctanos.
+        </p>
+        <p>
+            Esta política de privacidad describe cómo recopilamos, usamos y compartimos tu información cuando utilizas
+            nuestro repositorio académico.
+        </p>
+    </div>
+
+    <div class="legal-card">
+        <h2 class="legal-heading">2. Información que Recopilamos</h2>
+        <p>Recopilamos información personal que nos proporcionas voluntariamente cuando te registras en el sitio web:
+        </p>
+
+        <ul class="data-list">
+            <li>
+                <div class="list-icon">👤</div>
+                <div>
+                    <strong>Datos de Identidad:</strong> Nombre completo y dirección de correo electrónico
+                    (proporcionados vía Google OAuth).
+                </div>
+            </li>
+            <li>
+                <div class="list-icon">🖼️</div>
+                <div>
+                    <strong>Datos de Perfil:</strong> Foto de perfil pública asociada a tu cuenta de Google.
+                </div>
+            </li>
+            <li>
+                <div class="list-icon">📚</div>
+                <div>
+                    <strong>Datos de Uso:</strong> Artículos guardados en tu biblioteca personal y preferencias de
+                    lectura.
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="legal-card highlight-card">
+        <h2 class="legal-heading">3. Uso de Servicios de Google</h2>
+        <p>
+            Nexus Ciencia utiliza servicios de autenticación proporcionados por Google. El uso y la transferencia a
+            cualquier otra aplicación de la información recibida de las API de Google se adherirán a la
+            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank"
+                rel="noopener noreferrer">Política de Datos de Usuario de los Servicios API de Google</a>, incluidos los
+            requisitos de uso limitado.
+        </p>
+        <p>
+            <strong>Nota:</strong> No almacenamos tu contraseña de Google ni tenemos acceso a tus correos privados o
+            archivos de Drive. Solo accedemos a tu perfil público básico para identificarte.
+        </p>
+    </div>
+
+    <div class="legal-card">
+        <h2 class="legal-heading">4. Cookies y Tecnologías de Rastreo</h2>
+        <p>
+            Utilizamos cookies de sesión para mantener tu cuenta activa mientras navegas. No utilizamos cookies de
+            terceros para publicidad invasiva ni vendemos tus datos de navegación a anunciantes.
+        </p>
+    </div>
+
+    <div class="contact-box">
+        <h3>¿Tienes dudas sobre tu privacidad?</h3>
+        <p>Nuestro equipo de cumplimiento está disponible para resolver tus inquietudes.</p>
+        <a href="mailto:privacidad@nexusciencia.com" class="btn-contact">Contactar Oficial de Privacidad</a>
+    </div>
+
+</div>
+
+{% endblock %}

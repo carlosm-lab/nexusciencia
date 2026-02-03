@@ -1,0 +1,1164 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: LAYOUT PRINCIPAL (LAYOUT.CSS)
+   ==========================================================================
+   Descripción: Estructura global del sitio.
+   Nota: Las variables CSS están centralizadas en variables.css
+   ========================================================================== */
+
+/* Animación para header */
+@keyframes rotateBg {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animación: título sale del header hacia el sidebar (al abrir) */
+@keyframes slideToSidebar {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+}
+
+/* Animación: título entra desde sidebar al header (al cerrar) */
+@keyframes slideFromSidebar {
+    0% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+}
+
+/* Animación: logo sale del header hacia el sidebar (al abrir) */
+@keyframes slideLogoToSidebar {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    40% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+}
+
+/* Animación: logo entra desde sidebar al header (al cerrar) */
+@keyframes slideLogoFromSidebar {
+    0% {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   1. BARRA LATERAL (SIDEBAR)
+   -------------------------------------------------------------------------- */
+
+.sidebar {
+    width: var(--sidebar-width);
+    /* Fix para móviles: dvh se ajusta cuando aparece/desaparece la barra del navegador */
+    height: 100vh;
+    /* Fallback para navegadores antiguos */
+    height: 100dvh;
+    /* Dynamic viewport height - soporte moderno */
+    height: -webkit-fill-available;
+    /* Fallback para Safari iOS */
+    background-color: var(--sidebar-bg);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    white-space: nowrap;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    border-right: 1px solid var(--border-color);
+}
+
+body.sidebar-toggled .sidebar {
+    width: var(--sidebar-mini);
+}
+
+/* --------------------------------------------------------------------------
+   2. ENCABEZADO DEL SIDEBAR
+   -------------------------------------------------------------------------- */
+
+.sidebar-header {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+    gap: 15px;
+}
+
+.brand-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centrar contenido */
+    gap: 10px;
+    transition: opacity 0.2s;
+    min-width: 0;
+    flex: 1;
+    /* Ocupa espacio disponible para centrarse */
+}
+
+.brand-text {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #fff, #94A3B8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+}
+
+.sidebar-toggle-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Botón toggle móvil (header) */
+.mobile-toggle-btn {
+    display: block;
+    color: #333;
+    margin-right: 15px;
+    background: transparent;
+    border: none;
+}
+
+.mobile-toggle-btn:hover {
+    color: var(--accent-color);
+}
+
+/* --------------------------------------------------------------------------
+   3. PERFIL, MENÚ Y FOOTER (SIDEBAR)
+   -------------------------------------------------------------------------- */
+
+.sidebar-profile-section {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, transparent 100%);
+}
+
+.profile-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: opacity 0.2s;
+}
+
+.profile-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-info {
+    overflow: hidden;
+}
+
+.profile-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.profile-role {
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Estados Colapsados */
+body.sidebar-toggled .brand-text,
+body.sidebar-toggled .menu-category,
+body.sidebar-toggled .link-text,
+body.sidebar-toggled .profile-info,
+body.sidebar-toggled .footer-btn span {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+body.sidebar-toggled .sidebar-header {
+    justify-content: center;
+    padding: 0;
+}
+
+body.sidebar-toggled .brand-wrapper {
+    display: none;
+}
+
+body.sidebar-toggled .sidebar-profile-section {
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+}
+
+body.sidebar-toggled .profile-avatar,
+body.sidebar-toggled .profile-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+}
+
+.sidebar-menu {
+    padding: 24px 12px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    /* Fix crítico para flexbox scroll */
+    -webkit-overflow-scrolling: touch;
+    /* Scroll suave momentum en iOS */
+    overscroll-behavior: contain;
+    /* Prevenir propagación de scroll */
+    /* Ocultar scrollbar manteniendo funcionalidad */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+/* Ocultar scrollbar en Chrome/Safari/Opera */
+.sidebar-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.menu-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #64748B;
+    font-weight: 800;
+    margin: 24px 0 12px 12px;
+    letter-spacing: 1px;
+    transition: opacity 0.3s;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 48px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    position: relative;
+    border-bottom: none;
+}
+
+.menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.menu-item:last-child::after {
+    display: none;
+}
+
+.menu-item svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.menu-item:hover {
+    background-color: var(--sidebar-hover);
+    color: #FFFFFF;
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.menu-item:hover svg {
+    color: #FFFFFF;
+    transform: translateX(2px);
+}
+
+.menu-item.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.05) 100%);
+    color: #60A5FA;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.menu-item.active::after {
+    display: none;
+}
+
+.menu-item.active svg {
+    color: #60A5FA;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+}
+
+body.sidebar-toggled .menu-item {
+    justify-content: center;
+    padding: 0;
+}
+
+body.sidebar-toggled .menu-item svg {
+    margin-right: 0;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.footer-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.logout-btn-full {
+    background: rgba(239, 68, 68, 0.1);
+    color: #F87171;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+.logout-btn-full:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.login-btn-full {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.login-btn-full:hover {
+    background: #2563EB;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.logout-btn-disabled {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    color: #64748B;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+body.sidebar-toggled .footer-btn,
+body.sidebar-toggled .logout-btn-disabled {
+    padding: 12px;
+    justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   4. CONTENEDOR PRINCIPAL Y HEADER SUPERIOR
+   -------------------------------------------------------------------------- */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* background-color: var(--bg-body); - Removido para Full Bleed */
+}
+
+body.sidebar-toggled .main-content {
+    margin-left: var(--sidebar-mini);
+}
+
+/* --- HEADER UNIFICADO --- */
+.top-header {
+    height: 80px;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+}
+
+.top-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.header-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- MARCA EN HEADER (LÓGICA RESPONSIVA) --- */
+.header-brand-dynamic {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    gap: 10px;
+}
+
+body.sidebar-toggled .header-brand-dynamic {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.header-brand-text {
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-left: 12px;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    white-space: nowrap;
+    /* Mismo gradiente que el sidebar */
+    background: linear-gradient(90deg, #fff, #94A3B8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#mobile-toggle svg {
+    color: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+
+.header-brand-dynamic svg {
+    stroke: #3B82F6 !important;
+    /* Mismo color que sidebar */
+}
+
+/* --------------------------------------------------------------------------
+   5. BUSCADOR GLOBAL
+   -------------------------------------------------------------------------- */
+
+.search-container-premium {
+    position: relative;
+    flex: 1;
+    max-width: 550px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-left: auto;
+}
+
+.search-icon-wrapper {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.search-container-premium input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    color: #FFFFFF;
+    font-weight: 500;
+    padding: 0 10px;
+}
+
+.search-container-premium input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+}
+
+.search-btn-inside {
+    background: #3B82F6;
+    color: white;
+    border: 1px solid #3B82F6;
+    border-radius: 10px;
+    padding: 0 20px;
+    height: 100%;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-btn-inside:hover {
+    background: #2563EB;
+    border-color: #2563EB;
+}
+
+.search-container-premium:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.search-container-premium:focus-within .search-icon-wrapper {
+    color: #3B82F6;
+}
+
+/* --------------------------------------------------------------------------
+   6. CONTENIDO Y PUBLICIDAD
+   -------------------------------------------------------------------------- */
+
+.page-content {
+    padding: 32px;
+    max-width: 100%;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.ad-banner-container {
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+.ad-box-pc,
+.ad-box-mobile {
+    background-color: #F8FAFC;
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ad-box-pc {
+    height: 90px;
+}
+
+.ad-box-mobile {
+    height: 100px;
+}
+
+.ad-label {
+    color: #94A3B8;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   7. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+
+    /* BLOQUEAR SCROLL DEL BODY cuando sidebar está abierto */
+    body.sidebar-toggled {
+        overflow: hidden !important;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        /* Prevenir scroll touch en el body */
+    }
+
+    .sidebar {
+        width: 280px !important;
+        margin-left: 0;
+        transform: translateX(-100%);
+        left: 0;
+        box-shadow: none;
+        /* Altura dinámica real para móviles */
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        height: auto;
+        /* Usar top/bottom en vez de height para evitar problemas con vh */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Asegurar que el menú pueda scrollear independientemente */
+    .sidebar-menu {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+        /* Permitir solo scroll vertical en el menú */
+    }
+
+    body.sidebar-toggled .sidebar {
+        transform: translateX(0);
+        margin-left: 0;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .top-header {
+        padding: 0 16px;
+        height: 70px;
+    }
+
+    body.sidebar-toggled #mobile-toggle {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    body.sidebar-toggled .brand-text,
+    body.sidebar-toggled .link-text,
+    body.sidebar-toggled .profile-info,
+    body.sidebar-toggled .footer-btn span {
+        display: block !important;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    body.sidebar-toggled .brand-wrapper {
+        display: flex;
+    }
+
+    body.sidebar-toggled .sidebar-header {
+        justify-content: space-between;
+        padding: 0 20px;
+    }
+
+    body.sidebar-toggled .menu-item {
+        justify-content: flex-start;
+        padding: 12px 16px;
+    }
+
+    body.sidebar-toggled .menu-item svg {
+        margin-right: 14px;
+    }
+
+    body.sidebar-toggled .sidebar-profile-section {
+        padding: 24px;
+        display: block;
+    }
+
+    body.sidebar-toggled .profile-avatar,
+    body.sidebar-toggled .profile-avatar-placeholder {
+        width: 48px;
+        height: 48px;
+        margin: 0;
+    }
+
+    body.sidebar-toggled .footer-btn {
+        justify-content: center;
+    }
+
+    .search-container-premium {
+        display: none;
+    }
+
+    .page-content {
+        padding: 20px;
+    }
+
+    #sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    body.sidebar-toggled #sidebar-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .header-brand-dynamic svg {
+        width: 24px;
+        height: 24px;
+        /* Sin animación por defecto - se activa con clases JS */
+    }
+
+    .header-brand-text {
+        font-size: 1.1rem;
+        margin-left: 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        /* Sin animación por defecto - se activa con clases JS */
+    }
+
+    .header-brand-dynamic {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        display: flex;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    /* Ocultar título y logo del sidebar cuando está cerrado */
+    .brand-text,
+    .brand-wrapper svg {
+        opacity: 0;
+        transition: opacity 0s;
+    }
+
+    /* Mostrar título y logo del sidebar cuando está abierto */
+    body.sidebar-toggled .brand-text,
+    body.sidebar-toggled .brand-wrapper svg {
+        opacity: 1;
+    }
+
+    body.sidebar-toggled .header-brand-dynamic {
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* ===== ANIMACIONES CONTROLADAS POR JS ===== */
+
+    /* Animación al CERRAR sidebar (elementos entran al header) */
+    body.sidebar-closing .header-brand-text {
+        animation: slideFromSidebar 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    body.sidebar-closing .header-brand-dynamic svg {
+        animation: slideLogoFromSidebar 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    /* Animación al ABRIR sidebar (elementos salen del header) */
+    body.sidebar-opening .header-brand-text {
+        animation: slideToSidebar 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    body.sidebar-opening .header-brand-dynamic svg {
+        animation: slideLogoToSidebar 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+}
+
+/* --- FIX CRÍTICO: MODALES Y TOASTS --- */
+
+/* TOAST (Notificación flotante) */
+#nexus-toast {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    /* Z-Index extremo para asegurar visibilidad sobre modales y readers */
+    z-index: 2147483647 !important;
+
+    min-width: 250px;
+    background-color: #1E293B;
+    color: #fff;
+    text-align: center;
+    border-radius: 50px;
+    padding: 12px 24px;
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+#nexus-toast.show {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Variantes de color para toasts */
+#nexus-toast.toast-success {
+    background: linear-gradient(135deg, #10B981, #059669);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+#nexus-toast.toast-error {
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+#nexus-toast.toast-default {
+    background: linear-gradient(135deg, #1E293B, #334155);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* MODAL (Ventana emergente) */
+#confirmation-modal {
+    display: none;
+}
+
+#confirmation-modal.active,
+.nexus-modal-overlay.active {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.nexus-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.nexus-modal-box {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    transform: scale(0.95);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid #E2E8F0;
+}
+
+#confirmation-modal.active .nexus-modal-box {
+    transform: scale(1);
+}
+
+.modal-icon-warning {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.modal-title-custom {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 10px;
+}
+
+.modal-text-custom {
+    color: #64748B;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.modal-actions-custom {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-modal {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.1s;
+}
+
+.btn-modal:active {
+    transform: scale(0.95);
+}
+
+.btn-modal-cancel {
+    background-color: #F1F5F9;
+    color: #475569;
+}
+
+.btn-modal-cancel:hover {
+    background-color: #E2E8F0;
+}
+
+.btn-modal-confirm {
+    background-color: #EF4444;
+    color: white;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.btn-modal-confirm:hover {
+    background-color: #DC2626;
+}
+
+/* --------------------------------------------------------------------------
+   8. SKIP LINK - ACCESIBILIDAD (WCAG 2.1)
+   -------------------------------------------------------------------------- */
+
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color, #3B82F6);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 0 0 8px 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    z-index: 10000;
+    transition: top 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* Mejora: focus visible para todos los elementos interactivos */
+:focus-visible {
+    outline: 2px solid var(--accent-color, #3B82F6);
+    outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   9. THEME TOGGLE SWITCH (INTERRUPTOR DE MODO OSCURO)
+   -------------------------------------------------------------------------- */
+
+.theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 10px;
+}
+
+.theme-icon-sun,
+.theme-icon-moon {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.theme-icon-sun {
+    color: #F59E0B;
+}
+
+.theme-icon-moon {
+    color: #6366F1;
+}
+
+/* Toggle Switch Styles */
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%);
+    border-radius: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #CBD5E1;
+}
+
+.theme-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 2px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Checked state (dark mode) */
+.theme-switch input:checked+.theme-slider {
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    border-color: #4F46E5;
+}
+
+.theme-switch input:checked+.theme-slider::before {
+    transform: translateX(20px);
+    background: #FDE68A;
+    box-shadow: 0 0 8px rgba(253, 230, 138, 0.6);
+}
+
+/* Focus state */
+.theme-switch input:focus-visible+.theme-slider {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Hover effects */
+.theme-toggle-wrapper:hover .theme-slider {
+    border-color: #94A3B8;
+}
+
+.theme-toggle-wrapper:hover .theme-switch input:checked+.theme-slider {
+    border-color: #6366F1;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .theme-slider {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    border-color: #475569;
+}
+
+[data-theme="dark"] .theme-slider::before {
+    background: #F8FAFC;
+}
+
+[data-theme="dark"] .theme-toggle-wrapper:hover .theme-slider {
+    border-color: #64748B;
+}
+
+[data-theme="dark"] .theme-toggle-wrapper {
+    border-color: #475569 !important;
+}

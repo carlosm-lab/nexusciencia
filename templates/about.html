@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre Nosotros | NexusCiencia - Repositorio Científico{% endblock %}
+{% block description %}Conoce al equipo detrás de NexusCiencia, el repositorio científico de psicología. Nuestra misión
+es democratizar el acceso al conocimiento académico.{% endblock %}
+{% block og_title %}Sobre Nosotros | NexusCiencia{% endblock %}
+{% block og_description %}Conoce al equipo y la misión de NexusCiencia, el repositorio científico de psicología en
+español.{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Sobre Nosotros</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- H1 para SEO -->
+<h1 class="visually-hidden">Sobre NexusCiencia - Equipo y Misión del Repositorio Científico</h1>
+
+<div class="history-section">
+    <div class="section-label">Nuestra Historia</div>
+    <h2 class="section-heading">De una idea a una comunidad</h2>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+            <div class="history-single-box">
+                <h3 style="font-weight: 800; color: #1E293B; margin-bottom: 20px; font-size: 1.5rem;">
+                    La Misión de NexusCiencia
+                </h3>
+                <p style="color: #64748B; font-size: 1.1rem; line-height: 1.8; margin-bottom: 0;">
+                    NexusCiencia nació de una necesidad real: democratizar el acceso al conocimiento
+                    científico en psicología para estudiantes, profesionales y entusiastas de habla
+                    hispana. Fundado en 2024, nuestro repositorio reúne artículos académicos cuidadosamente
+                    seleccionados sobre neurociencia, psicología clínica, comportamiento humano y salud mental.
+                    <br><br>
+                    Creemos que el conocimiento científico no debe estar detrás de barreras económicas.
+                    Por eso, cada artículo en nuestra plataforma es de acceso completamente gratuito.
+                    Nuestro equipo de psicólogos y neurocientíficos revisa y curar el contenido para
+                    garantizar su rigor académico y relevancia práctica.
+                    <br><br>
+                    Nuestra visión para 2030 es convertirnos en la referencia número uno de contenido
+                    científico de psicología en español, sirviendo a millones de estudiantes y
+                    profesionales en Latinoamérica y España.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="team-card founder-card">
+                <div class="team-cover"></div>
+                <div class="team-avatar-wrapper">
+                    <img src="https://ui-avatars.com/api/?name=Carlos+M&background=0D8ABC&color=fff&size=128"
+                        class="team-avatar" alt="Carlos Molina">
+                </div>
+                <div class="team-info">
+                    <div class="team-name">Carlos Molina</div>
+                    <div class="team-role">Fundador & CEO</div>
+                    <p class="team-bio">
+                        Ingeniero de Software y apasionado por la divulgación científica. Arquitecto principal de la
+                        plataforma Nexus y defensor del código abierto.
+                    </p>
+
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                        <span style="background:#F1F5F9; padding:8px; border-radius:50%; color:#64748B;">✉️</span>
+                        <span style="background:#F1F5F9; padding:8px; border-radius:50%; color:#64748B;">🌐</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="team-section">
+    <div class="section-label">Colaboradores</div>
+    <h2 class="section-heading">Consejo Académico</h2>
+
+    <div class="team-grid">
+
+        <div class="team-card">
+            <div class="team-cover" style="background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);"></div>
+            <div class="team-avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Ana+R&background=6366f1&color=fff&size=128"
+                    class="team-avatar" alt="Dra. Ana Rojas">
+            </div>
+            <div class="team-info">
+                <div class="team-name">Dra. Ana Rojas</div>
+                <div class="team-role">Neurociencia</div>
+                <p class="team-bio">Doctora en Neurobiología por la UNAM. Supervisa la integridad académica de cada
+                    publicación.</p>
+            </div>
+        </div>
+
+        <div class="team-card">
+            <div class="team-cover" style="background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%);"></div>
+            <div class="team-avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Luis+P&background=10b981&color=fff&size=128"
+                    class="team-avatar" alt="Lic. Luis Pérez">
+            </div>
+            <div class="team-info">
+                <div class="team-name">Lic. Luis Pérez</div>
+                <div class="team-role">Editor en Jefe</div>
+                <p class="team-bio">Psicólogo clínico especializado en terapia cognitivo-conductual. Gestiona la
+                    curaduría de contenido.</p>
+            </div>
+        </div>
+
+        <div class="team-card"
+            style="border: 2px dashed #E2E8F0; display: flex; align-items: center; justify-content: center; min-height: 300px; box-shadow: none;">
+            <div style="text-align: center; color: #94A3B8;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">👋</div>
+                <p style="font-weight: 600;">¿Quieres unirte?</p>
+                <a href="/info/contacto"
+                    style="color: #3B82F6; text-decoration: none; font-size: 0.9rem;">Contáctanos</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- JSON-LD Organization Schema (Auditoría SEO 4.1, E-E-A-T 5.3) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NexusCiencia",
+    "alternateName": "Nexus Ciencia",
+    "url": "{{ request.url_root.rstrip('/') }}",
+    "logo": "{{ url_for('static', filename='img/favicon.ico', _external=True) }}",
+    "description": "Repositorio científico de artículos de psicología. Democratizamos el acceso al conocimiento académico.",
+    "foundingDate": "2024",
+    "sameAs": [],
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "{{ request.url_root.rstrip('/') }}/info/contacto",
+        "availableLanguage": "Spanish"
+    },
+    "knowsAbout": [
+        "Psicología",
+        "Neurociencia", 
+        "Psicología Clínica",
+        "Salud Mental",
+        "Comportamiento Humano",
+        "Investigación Científica"
+    ]
+}
+</script>
+
+<!-- JSON-LD AboutPage (Auditoría SEO 3.4) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "Sobre Nosotros - NexusCiencia",
+    "description": "Conoce al equipo detrás de NexusCiencia, el repositorio científico de psicología.",
+    "url": "{{ request.url_root.rstrip('/') }}/info/nosotros",
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "NexusCiencia"
+    }
+}
+</script>
+
+{% endblock %}

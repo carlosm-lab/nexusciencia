@@ -1,0 +1,497 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: CONTACTO (CONTACT.CSS)
+   ==========================================================================
+   Descripción: Estilos exclusivos para la página de contacto (/info/contacto).
+   Incluye formulario, sección de especialistas y preguntas frecuentes.
+   Dependencias: layout.css (variables globales)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SECCIÓN HERO (ENCABEZADO DE PÁGINA)
+   -------------------------------------------------------------------------- */
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-radius: 20px;
+    min-height: 200px;
+    padding: 40px;
+    
+    /* Flexbox para alineación del contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    
+    color: white;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+}
+
+/* Fondo animado */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 800px;
+}
+
+.about-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.about-subtitle {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-decoration {
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------
+   2. ESTRUCTURA PRINCIPAL (GRID FORMULARIO / VISUAL)
+   -------------------------------------------------------------------------- */
+
+.contact-layout {
+    display: grid;
+    /* Columna izquierda (Formulario) más ancha que la derecha (Visual) */
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    margin-bottom: 80px;
+    align-items: stretch; /* Estira ambas columnas a la misma altura */
+}
+
+/* --------------------------------------------------------------------------
+   3. SECCIÓN DE FORMULARIO (COLUMNA IZQUIERDA)
+   -------------------------------------------------------------------------- */
+
+.form-section {
+    height: 100%;
+}
+
+.form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    height: 100%;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 25px;
+}
+
+/* Grid interno para campos en misma línea (Nombre/Email) */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Etiquetas de campos */
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+/* Estilos comunes para Inputs, Selects y Textareas */
+input, 
+select, 
+textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFC;
+    font-size: 0.95rem;
+    color: #1E293B;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+input:focus, 
+select:focus, 
+textarea:focus {
+    background: white;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Input de Archivo Personalizado */
+.file-input {
+    display: none; /* Ocultar input original */
+}
+
+.file-custom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px dashed #CBD5E1;
+    border-radius: 12px;
+    background: #F8FAFC;
+    color: #64748B;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.9rem;
+}
+
+.file-custom:hover {
+    border-color: #3B82F6;
+    color: #3B82F6;
+    background: #EFF6FF;
+}
+
+/* Botón de Envío con Estados (Loading/Success) */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #3B82F6;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    
+    /* Flex para centrar contenido (texto/loader) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-submit:hover {
+    background: #2563EB;
+    transform: translateY(-2px);
+}
+
+/* Elementos ocultos por defecto */
+.btn-loader, 
+.btn-success-icon {
+    display: none;
+}
+
+/* Estado: Cargando */
+.btn-submit.loading .btn-text {
+    display: none;
+}
+
+.btn-submit.loading .btn-loader {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Estado: Éxito */
+.btn-submit.success {
+    background: #10B981; /* Verde */
+    pointer-events: none;
+}
+
+.btn-submit.success .btn-text, 
+.btn-submit.success .btn-loader {
+    display: none;
+}
+
+.btn-submit.success .btn-success-icon {
+    display: block;
+    font-size: 1.2rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   4. SECCIÓN VISUAL (COLUMNA DERECHA)
+   -------------------------------------------------------------------------- */
+
+.visual-section {
+    height: 100%;
+}
+
+.illustration-box {
+    background: #F8FAFC;
+    border-radius: 24px;
+    padding: 40px;
+    border: 2px dashed #E2E8F0;
+    height: 100%;
+    
+    /* Centrado total del contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.illustration-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.contact-svg {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 30px;
+}
+
+.visual-text h3 {
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 10px;
+}
+
+.visual-text p {
+    color: #64748B;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+   5. SECCIÓN DE ESPECIALISTAS
+   -------------------------------------------------------------------------- */
+
+.specialists-section {
+    margin-bottom: 80px;
+}
+
+.section-heading-small {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 10px;
+}
+
+.section-sub {
+    text-align: center;
+    color: #64748B;
+    margin-bottom: 40px;
+}
+
+/* Grid de tarjetas de equipo */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.team-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+}
+
+/* Portada superior de la tarjeta */
+.team-cover {
+    height: 80px;
+    background: #0F172A; /* Azul Oscuro Sidebar */
+    opacity: 1;
+}
+
+/* Avatar superpuesto */
+.team-avatar-wrapper {
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+}
+
+.team-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid white; /* Borde blanco para separar */
+    object-fit: cover;
+    background-color: #F1F5F9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-info {
+    padding: 15px 25px 25px 25px;
+}
+
+.team-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 4px;
+}
+
+.team-role {
+    color: #3B82F6;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.team-bio {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #64748B;
+    line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   6. SECCIÓN DE PREGUNTAS FRECUENTES (FAQ)
+   -------------------------------------------------------------------------- */
+
+.faq-footer-section {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 40px auto;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    
+    /* Flex para separar título y flecha */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    font-weight: 600;
+    color: #1E293B;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.accordion-header .arrow {
+    transition: transform 0.3s;
+    color: #94A3B8;
+}
+
+/* Estado Activo del Acordeón */
+.accordion-item.active .arrow {
+    transform: rotate(180deg);
+    color: #3B82F6;
+}
+
+.accordion-body {
+    max-height: 0; /* Oculto por defecto */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; /* Animación suave */
+    background: #F8FAFC;
+    padding: 0 20px;
+}
+
+.accordion-body p {
+    margin: 20px 0;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.accordion-item.active .accordion-body {
+    max-height: 200px; /* Altura suficiente para mostrar contenido */
+}
+
+/* --------------------------------------------------------------------------
+   7. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    /* Layout a una sola columna */
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Formulario a una columna */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reordenar: Ilustración arriba */
+    .visual-section {
+        order: -1;
+        height: auto;
+    }
+
+    .illustration-box {
+        height: auto;
+        padding: 40px 20px;
+    }
+
+    /* Grid de equipo a una columna */
+    .team-grid {
+        grid-template-columns: 1fr;
+    }
+}

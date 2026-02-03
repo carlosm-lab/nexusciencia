@@ -1,0 +1,80 @@
+{# Componente de paginación reutilizable con SEO mejorado #}
+{# Uso: {% include 'components/pagination.html' with context %} #}
+{# Variables requeridas: pagination_obj, endpoint (opcional, default: request.endpoint) #}
+
+{# SEO: rel="prev/next" para paginación en
+
+<head>
+    Este bloque debe ser incluido en el bloque head_extra de las páginas que usen paginación #}
+    {% if pagination_obj and pagination_obj.pages > 1 %}
+    {# Los tags de paginación se añaden en las páginas que usan el componente #}
+    {% endif %}
+
+    {% if pagination_obj and pagination_obj.pages > 1 %}
+    <nav class="pagination-container" aria-label="Paginación de contenido">
+        <ul class="pagination-nexus">
+            {# Botón Anterior #}
+            {% if pagination_obj.has_prev %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ pagination_obj.prev_num }}{% if request.args.get('q') %}&q={{ request.args.get('q') }}{% endif %}"
+                    aria-label="Página anterior" rel="prev">
+                    ← Anterior
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-disabled="true">← Anterior</span>
+            </li>
+            {% endif %}
+
+            {# Números de página #}
+            {% for page in pagination_obj.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+            {% if page %}
+            {% if page == pagination_obj.page %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ page }}{% if request.args.get('q') %}&q={{ request.args.get('q') }}{% endif %}">
+                    {{ page }}
+                </a>
+            </li>
+            {% endif %}
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-ellipsis">...</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {# Botón Siguiente #}
+            {% if pagination_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="?page={{ pagination_obj.next_num }}{% if request.args.get('q') %}&q={{ request.args.get('q') }}{% endif %}"
+                    aria-label="Página siguiente" rel="next">
+                    Siguiente →
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-disabled="true">Siguiente →</span>
+            </li>
+            {% endif %}
+        </ul>
+
+        {# Información de página #}
+        <div class="pagination-info">
+            Página {{ pagination_obj.page }} de {{ pagination_obj.pages }}
+            ({{ pagination_obj.total }} elementos en total)
+        </div>
+    </nav>
+
+    {# Macro para generar links de paginación para
+
+    <head> #}
+        {# Debe llamarse en el bloque styles de páginas paginadas #}
+        {% endif %}

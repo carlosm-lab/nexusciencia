@@ -1,0 +1,252 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: POLÍTICA DE PRIVACIDAD (PRIVACY.CSS)
+   ==========================================================================
+   Descripción: Estilos para la página de Política de Privacidad.
+   Se diferencia del Aviso Legal por usar un diseño de ancho completo (Full Width)
+   y tarjetas modulares para explicar el manejo de datos.
+   Dependencias: layout.css (variables globales)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SECCIÓN HERO (ENCABEZADO COMPARTIDO)
+   -------------------------------------------------------------------------- */
+/* Nota: Estilos homologados con about.css, contact.css y legal.css */
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-radius: 20px;
+    min-height: 200px;
+    padding: 40px;
+    
+    /* Flexbox para alineación */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    
+    color: white;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+}
+
+/* Fondo animado (Círculo Radial) */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 800px;
+}
+
+.about-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.about-subtitle {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-decoration {
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------
+   2. CONTENEDOR PRINCIPAL (DISEÑO FLUIDO)
+   -------------------------------------------------------------------------- */
+
+.legal-container {
+    /* CAMBIO CLAVE: Override para eliminar límites de ancho */
+    width: 100%;
+    max-width: none; 
+    margin-bottom: 60px;
+}
+
+/* Badge de última actualización */
+.last-updated {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.update-badge {
+    background: #E2E8F0;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   3. TARJETAS DE CONTENIDO (MÓDULOS DE TEXTO)
+   -------------------------------------------------------------------------- */
+
+.legal-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    margin-bottom: 30px;
+    
+    /* Borde distintivo punteado (Estilo "Documento de Archivo") */
+    border: 2px dashed #CBD5E1; 
+    
+    box-shadow: none;
+    width: 100%;
+    
+    /* Transición suave para interacción */
+    transition: border-color 0.3s ease;
+}
+
+.legal-card:hover {
+    border-color: #3B82F6; /* Resalte azul al pasar el mouse */
+}
+
+.legal-heading {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.legal-card p {
+    color: #4B5563;
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+/* Tarjeta Destacada (Ej: Sección de Google) */
+.highlight-card {
+    background: #F8FAFC;
+    border-color: #BFDBFE; /* Borde azul claro por defecto */
+    border-style: dashed;
+}
+
+/* --------------------------------------------------------------------------
+   4. LISTAS DE DATOS (ICONOS + TEXTO)
+   -------------------------------------------------------------------------- */
+
+.data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.data-list li {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+/* Contenedor del Icono de la lista */
+.list-icon {
+    background: #EFF6FF;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    
+    /* Centrado del emoji/icono */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 1.2rem;
+    flex-shrink: 0; /* Evita que el icono se aplaste */
+}
+
+/* --------------------------------------------------------------------------
+   5. CAJA DE CONTACTO DE PRIVACIDAD
+   -------------------------------------------------------------------------- */
+
+.contact-box {
+    text-align: center;
+    padding: 40px;
+    background: #0F172A; /* Fondo oscuro */
+    border-radius: 20px;
+    color: white;
+    margin-top: 50px;
+}
+
+.contact-box h3 {
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.contact-box p {
+    color: #94A3B8;
+    margin-bottom: 25px;
+}
+
+.btn-contact {
+    display: inline-block;
+    background: white;
+    color: #0F172A;
+    padding: 12px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.btn-contact:hover {
+    background: #E2E8F0;
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   6. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    /* Ajustes del Hero */
+    .about-hero {
+        padding: 30px 20px;
+        text-align: center;
+        align-items: center;
+    }
+
+    /* Reducción de padding en tarjetas */
+    .legal-card {
+        padding: 25px;
+    }
+}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Política Editorial | NexusCiencia{% endblock %}
+
+{% block description %}Conoce los estándares de calidad, proceso de curación y criterios de selección de artículos
+científicos en NexusCiencia. Transparencia y rigor académico.{% endblock %}
+
+{% block og_title %}Política Editorial | NexusCiencia{% endblock %}
+{% block og_description %}Criterios de selección y estándares de calidad para el contenido científico de
+NexusCiencia{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Política Editorial</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- H1 para SEO -->
+<h1 class="visually-hidden">Política Editorial de NexusCiencia - Estándares de Calidad Académica</h1>
+
+<!-- Layout principal -->
+<div class="legal-layout">
+
+    <!-- Sidebar con índice -->
+    <aside class="legal-sidebar">
+        <div class="toc-card">
+            <h3 class="toc-title">Índice</h3>
+            <nav class="toc-nav">
+                <a href="#filosofia" class="toc-link">Filosofía Editorial</a>
+                <a href="#criterios" class="toc-link">Criterios de Selección</a>
+                <a href="#proceso" class="toc-link">Proceso de Curación</a>
+                <a href="#fuentes" class="toc-link">Fuentes y Referencias</a>
+                <a href="#actualizacion" class="toc-link">Actualización</a>
+                <a href="#independencia" class="toc-link">Independencia</a>
+                <a href="#contacto" class="toc-link highlight-link">Contacto Editorial</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="legal-content">
+
+        <section id="filosofia" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">📚</div>
+                <h2>Nuestra Filosofía Editorial</h2>
+            </div>
+            <p>
+                En NexusCiencia creemos que el conocimiento científico debe ser accesible, riguroso y relevante.
+                Esta política editorial establece los criterios que guían la selección, curación y publicación
+                de todo el contenido en nuestra plataforma.
+            </p>
+            <p>
+                Nuestro compromiso es ofrecer contenido de alta calidad académica que sea comprensible para
+                estudiantes, profesionales y cualquier persona interesada en la psicología.
+            </p>
+        </section>
+
+        <section id="criterios" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">✅</div>
+                <h2>Criterios de Selección de Contenido</h2>
+            </div>
+            <p>Cada artículo publicado en NexusCiencia debe cumplir los siguientes criterios:</p>
+            <ul class="legal-list">
+                <li><strong>Rigor científico:</strong> Basado en investigación publicada en revistas
+                    peer-reviewed o fuentes académicas reconocidas.</li>
+                <li><strong>Relevancia práctica:</strong> Aplicabilidad para estudiantes, profesionales
+                    o público interesado en psicología.</li>
+                <li><strong>Actualidad:</strong> Preferencia por investigaciones recientes o temas
+                    con validez científica vigente.</li>
+                <li><strong>Claridad expositiva:</strong> Redacción accesible sin sacrificar precisión técnica.</li>
+                <li><strong>Ética:</strong> Contenido que respeta principios éticos de la investigación psicológica.
+                </li>
+            </ul>
+        </section>
+
+        <section id="proceso" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">⚙️</div>
+                <h2>Proceso de Curación</h2>
+            </div>
+            <p>Nuestro proceso editorial sigue estas etapas:</p>
+            <ul class="legal-list">
+                <li><strong>1. Identificación:</strong> Búsqueda activa de contenido relevante en fuentes académicas.
+                </li>
+                <li><strong>2. Evaluación inicial:</strong> Verificación de criterios básicos de calidad y relevancia.
+                </li>
+                <li><strong>3. Revisión especializada:</strong> Análisis por profesionales con formación en el área
+                    temática.</li>
+                <li><strong>4. Adaptación:</strong> Síntesis y adaptación para audiencia hispanohablante manteniendo
+                    rigor.</li>
+                <li><strong>5. Categorización:</strong> Asignación a categorías temáticas y etiquetas relevantes.</li>
+                <li><strong>6. Publicación:</strong> Inclusión en el repositorio con metadatos completos.</li>
+            </ul>
+        </section>
+
+        <section id="fuentes" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">📖</div>
+                <h2>Fuentes y Referencias</h2>
+            </div>
+            <p>
+                Priorizamos contenido derivado de las siguientes fuentes:
+            </p>
+            <ul class="legal-list">
+                <li>Revistas científicas indexadas (JCR, Scopus, SciELO)</li>
+                <li>Asociaciones profesionales de psicología (APA, COP, etc.)</li>
+                <li>Instituciones académicas y de investigación</li>
+                <li>Libros de texto y manuales de referencia en el campo</li>
+            </ul>
+            <p>
+                Cuando un artículo sintetiza múltiples fuentes, estas se citan al final del contenido
+                para que los lectores puedan profundizar en la investigación original.
+            </p>
+        </section>
+
+        <section id="actualizacion" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">🔄</div>
+                <h2>Actualización y Correcciones</h2>
+            </div>
+            <p>
+                NexusCiencia se compromete a mantener su contenido actualizado. Cuando nueva evidencia
+                científica contradice o complementa información publicada, actualizamos el artículo
+                indicando claramente la fecha de modificación y la naturaleza del cambio.
+            </p>
+            <p>
+                Si detectas errores o tienes sugerencias de mejora, puedes contactarnos a través de
+                nuestra <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}"
+                    style="color: #3B82F6;">página de contacto</a>.
+            </p>
+        </section>
+
+        <section id="independencia" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">⚖️</div>
+                <h2>Independencia Editorial</h2>
+            </div>
+            <p>
+                NexusCiencia opera de forma independiente. Las decisiones editoriales se toman
+                exclusivamente en base a criterios de calidad científica y relevancia educativa,
+                sin influencia de intereses comerciales o patrocinadores externos.
+            </p>
+        </section>
+
+        <section id="contacto" class="legal-section highlight-section">
+            <div class="section-header">
+                <div class="icon-box">✉️</div>
+                <h2>Contacto Editorial</h2>
+            </div>
+            <p>
+                Para consultas relacionadas con nuestra política editorial, solicitudes de revisión
+                o propuestas de colaboración académica, contacta con nuestro equipo editorial a través
+                del <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}"
+                    style="color: #3B82F6; font-weight: 600;">formulario de contacto</a>.
+            </p>
+        </section>
+
+        <div class="last-updated">
+            Última actualización: Diciembre 2024
+        </div>
+
+    </div>
+</div>
+
+<!-- JSON-LD WebPage Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Política Editorial - NexusCiencia",
+    "description": "Criterios de selección, proceso de curación y estándares de calidad para el contenido científico de NexusCiencia",
+    "url": "{{ request.url_root.rstrip('/') }}/info/editorial",
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "{{ request.url_root.rstrip('/') }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Política Editorial"
+            }
+        ]
+    },
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "NexusCiencia"
+    }
+}
+</script>
+
+{% endblock %}

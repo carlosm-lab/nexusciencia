@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tag_display }} | Etiquetas | NexusCiencia{% endblock %}
+
+{% block description %}Artículos científicos sobre {{ tag_display }}. Encuentra {{ total_articulos }} publicaciones
+relacionadas con {{ tag_display }} en NexusCiencia.{% endblock %}
+
+{% block og_title %}{{ tag_display }} | Etiquetas | NexusCiencia{% endblock %}
+{% block og_description %}{{ total_articulos }} artículos científicos sobre {{ tag_display }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    .tag-hero {
+        margin-bottom: 2rem;
+    }
+
+    .tag-hero-content {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .tag-hero-icon {
+        font-size: 2.5rem;
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15));
+        border-radius: 16px;
+        flex-shrink: 0;
+        color: var(--accent-color);
+    }
+
+    .tag-hero-text h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .tag-hero-text p {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .tag-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .tag-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--text-tertiary);
+    }
+
+    .tag-stat strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .articles-section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Breadcrumbs -->
+{% set breadcrumb_items = [
+{'name': 'Inicio', 'url': url_for('main.inicio')},
+{'name': 'Etiquetas', 'url': None},
+{'name': tag_display, 'url': None}
+] %}
+{% include 'components/breadcrumbs.html' %}
+
+<!-- Tag Hero -->
+<div class="tag-hero">
+    <div class="tag-hero-content">
+        <div class="tag-hero-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+        </div>
+        <div class="tag-hero-text">
+            <h1>#{{ tag_display }}</h1>
+            <p>Artículos etiquetados con este tema</p>
+            <div class="tag-stats">
+                <div class="tag-stat">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <strong>{{ total_articulos }}</strong> artículo{% if total_articulos != 1 %}s{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Articles Section -->
+<h2 class="articles-section-title">Artículos con esta etiqueta</h2>
+
+{% if articulos %}
+<div class="library-grid">
+    {% for art in articulos %}
+    <div class="book-card">
+        <a href="{{ url_for('main.ver_articulo', cat_slug=get_category_slug(art.categoria), slug=art.slug) }}"
+            class="book-cover-link">
+            <div class="book-cover {{ loop.cycle('cover-purple', 'cover-blue', 'cover-dark', 'cover-green') }}">
+                <span class="read-hint">Clic para leer</span>
+                <svg class="card-decoration-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+                <div class="book-title">{{ art.titulo }}</div>
+            </div>
+        </a>
+        <div class="book-actions">
+            <div class="actions-default" id="actions-{{ art.id }}">
+                <button type="button"
+                    class="btn-book-action btn-save-card {% if art.id in ids_guardados %}saved{% endif %}"
+                    title="Guardar" data-id="{{ art.id }}" data-available="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                        fill="{% if art.id in ids_guardados %}currentColor{% else %}none{% endif %}"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </button>
+
+                <button type="button" class="btn-book-action action-play" title="Escuchar Podcast"
+                    onclick="playCardAudio('{{ art.id }}')" data-available="{{ 'true' if art.url_audio else 'false' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+
+                <a href="{{ art.url_pdf if art.url_pdf else 'javascript:void(0);' }}" target="_blank"
+                    class="btn-book-action action-pdf" title="Descargar PDF"
+                    data-available="{{ 'true' if art.url_pdf else 'false' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{# Paginación #}
+{% set pagination_obj = articulos_pag %}
+{% include 'components/pagination.html' %}
+
+{% else %}
+<div class="empty-state-container" style="text-align: center; padding: 3rem 1rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🏷️</div>
+    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">No hay artículos con esta etiqueta</h3>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Prueba explorando otras áreas de estudio.</p>
+    <a href="{{ url_for('main.categorias') }}"
+        style="color: var(--accent-color); text-decoration: none; font-weight: 500;">← Volver a categorías</a>
+</div>
+{% endif %}
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "{{ tag_display }}",
+    "description": "Artículos científicos sobre {{ tag_display }} en NexusCiencia",
+    "url": "{{ request.url_root.rstrip('/') }}{{ url_for('main.ver_tag', slug=tag_slug) }}",
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "{{ request.url_root.rstrip('/') }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Etiquetas"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ tag_display }}"
+            }
+        ]
+    },
+    "mainEntity": {
+        "@type": "ItemList",
+        "numberOfItems": {{ total_articulos }},
+        "itemListElement": [
+            {% for art in articulos_json %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "item": {
+                    "@type": "Article",
+                    "name": "{{ art.nombre }}",
+                    "url": "{{ request.url_root.rstrip('/') }}{{ art.url }}"
+                }
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

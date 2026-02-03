@@ -1,0 +1,439 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: SOLICITUD DE ARTÍCULO (REQUEST.CSS)
+   ==========================================================================
+   Descripción: Estilos exclusivos para la página de solicitud (/solicitar).
+   Implementa un diseño dividido 50/50 entre formulario e información visual.
+   Dependencias: layout.css (variables globales)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SECCIÓN HERO (ENCABEZADO COMPARTIDO)
+   -------------------------------------------------------------------------- */
+/* Nota: Estilos homologados con about.css, contact.css, legal.css */
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-radius: 20px;
+    
+    /* Dimensiones estándar */
+    min-height: 200px;
+    padding: 40px;
+    
+    /* Alineación de contenido (Izquierda) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    
+    color: white;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+}
+
+/* Fondo animado (Círculo Radial) */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 800px;
+}
+
+.about-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.about-subtitle {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-decoration {
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------
+   2. LAYOUT PRINCIPAL (GRID 50/50)
+   -------------------------------------------------------------------------- */
+
+.request-layout {
+    display: grid;
+    /* División exacta en dos columnas iguales */
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 80px;
+    
+    /* STRETCH: Fuerza a ambas columnas a tener la misma altura visual */
+    align-items: stretch; 
+}
+
+/* --------------------------------------------------------------------------
+   3. SECCIÓN DE FORMULARIO (COLUMNA IZQUIERDA)
+   -------------------------------------------------------------------------- */
+
+.form-section {
+    height: 100%; /* Ocupa todo el alto asignado por el grid */
+}
+
+.form-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    height: 100%; /* Se estira para llenar la columna */
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 25px;
+}
+
+/* Grid interno para campos en línea (Nombre / Email) */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+}
+
+/* Estilos de Inputs y Textarea */
+input, 
+select, 
+textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFC;
+    font-size: 0.95rem;
+    color: #1E293B;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+input:focus, 
+select:focus, 
+textarea:focus {
+    background: white;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Botón de Envío con Estados */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #3B82F6;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+    
+    /* Flex para centrar contenido */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-submit:hover {
+    background: #2563EB;
+    transform: translateY(-2px);
+}
+
+/* Elementos de estado ocultos por defecto */
+.btn-loader, 
+.btn-success-icon {
+    display: none;
+}
+
+/* Estado: Cargando */
+.btn-submit.loading .btn-text { display: none; }
+.btn-submit.loading .btn-loader {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Estado: Éxito */
+.btn-submit.success {
+    background: #10B981; /* Verde */
+    pointer-events: none;
+}
+.btn-submit.success .btn-text, 
+.btn-submit.success .btn-loader { display: none; }
+.btn-submit.success .btn-success-icon { display: block; font-size: 1.2rem; }
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   4. SECCIÓN INFORMATIVA (COLUMNA DERECHA)
+   -------------------------------------------------------------------------- */
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espacio entre las tarjetas */
+    height: 100%; /* Ocupa todo el alto de la columna grid */
+}
+
+/* Estilos base para ambas tarjetas (Ilustración y Proceso) */
+.illustration-box, 
+.process-box {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    border: 1px solid #E2E8F0;
+    
+    /* FLEXBOX MAGIC: Distribución equitativa */
+    flex: 1; /* Ambas tarjetas crecen para llenar el espacio 50/50 */
+    
+    /* Centrado vertical del contenido interno */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Tarjeta Superior: Ilustración */
+.illustration-box {
+    background: #F8FAFC;
+    border: 2px dashed #E2E8F0; /* Borde característico punteado */
+    align-items: center;
+    text-align: center;
+}
+
+.illustration-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.request-svg {
+    width: 100%;
+    max-width: 180px;
+    margin-bottom: 15px;
+}
+
+.illustration-box h4 {
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.illustration-box p {
+    color: #64748B;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Tarjeta Inferior: Proceso de Evaluación */
+.process-box h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.process-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.process-list li {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.process-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Números de paso */
+.step-num {
+    background: #EFF6FF;
+    color: #3B82F6;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.step-text {
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   5. SECCIÓN DE PREGUNTAS (FAQ)
+   -------------------------------------------------------------------------- */
+
+.faq-footer-section {
+    width: 100%;
+    margin: 0 auto 40px auto;
+}
+
+.section-heading-small {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 30px;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    font-weight: 600;
+    color: #1E293B;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.accordion-header .arrow {
+    transition: transform 0.3s;
+    color: #94A3B8;
+}
+
+/* Estado Activo */
+.accordion-item.active .arrow {
+    transform: rotate(180deg);
+    color: #3B82F6;
+}
+
+.accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #F8FAFC;
+    padding: 0 20px;
+}
+
+.accordion-body p {
+    margin: 20px 0;
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.accordion-item.active .accordion-body {
+    max-height: 200px;
+}
+
+/* --------------------------------------------------------------------------
+   6. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    /* Layout a una columna */
+    .request-layout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Formulario a una columna */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Ajuste de altura en info-section para móviles */
+    .info-section {
+        height: auto;
+        gap: 20px;
+    }
+
+    /* Permitir que las cajas tengan altura natural o mínima */
+    .illustration-box, 
+    .process-box {
+        flex: none; /* Desactiva la expansión forzada */
+        height: auto;
+        min-height: 200px;
+    }
+}

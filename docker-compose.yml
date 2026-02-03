@@ -1,0 +1,79 @@
+services:
+  web:
+    build: .
+    container_name: nexusciencia_web
+    ports:
+      - "5000:8000"
+    environment:
+      - FLASK_ENV=production
+      # IMPORTANTE: Configura estas variables en .env (sin valores por defecto por seguridad)
+      - DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
+    env_file:
+      - .env
+    volumes:
+      - ./instance:/app/instance
+      - ./logs:/app/logs
+      - ./backups:/app/backups
+      - ./templates/articulos:/app/templates/articulos
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    networks:
+      - nexus_network
+
+  db:
+    image: mysql:8.0
+    container_name: nexusciencia_db
+    environment:
+      # IMPORTANTE: Todas las credenciales deben configurarse en .env
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - nexus_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: nexusciencia_redis
+    restart: unless-stopped
+    networks:
+      - nexus_network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    container_name: nexusciencia_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/app/static:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+    networks:
+      - nexus_network
+
+volumes:
+  mysql_data:
+
+
+networks:
+  nexus_network:
+    driver: bridge

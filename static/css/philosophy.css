@@ -1,0 +1,218 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: FILOSOFÍA (PHILOSOPHY.CSS)
+   ==========================================================================
+   Descripción: Estilos exclusivos para la página de filosofía institucional.
+   Incluye la declaración de Misión, Visión y Valores Nucleares.
+   Dependencias: layout.css (variables globales)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SECCIÓN HERO (ENCABEZADO COMPARTIDO)
+   -------------------------------------------------------------------------- */
+/* Nota: Estilos homologados con about.css, contact.css y legal.css */
+
+.about-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+    border-radius: 20px;
+    
+    /* Dimensiones estándar */
+    min-height: 200px;
+    padding: 40px;
+    
+    /* Alineación de contenido (Izquierda) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    
+    color: white;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.3);
+}
+
+/* Fondo animado (Círculo Radial) */
+.about-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 800px;
+}
+
+.about-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #FFFFFF, #94A3B8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+.about-subtitle {
+    font-size: 1.1rem;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.hero-decoration {
+    position: absolute;
+    right: -20px;
+    bottom: -40px;
+    transform: rotate(-15deg);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.1;
+    color: white;
+}
+
+/* --------------------------------------------------------------------------
+   2. SECCIÓN MISIÓN Y VISIÓN
+   -------------------------------------------------------------------------- */
+
+.mv-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+/* Tarjeta de Misión/Visión */
+.mv-card {
+    background: white;
+    border-radius: 24px;
+    padding: 40px;
+    
+    /* Borde punteado característico (Estilo "Borrador/Idea") */
+    border: 2px dashed #CBD5E1;
+    
+    transition: all 0.3s ease;
+}
+
+/* Efecto Hover: Resalte en Azul */
+.mv-card:hover {
+    transform: translateY(-5px);
+    border-color: #3B82F6;
+    background-color: #F8FAFC;
+}
+
+.mv-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.mv-card h2 {
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 15px;
+}
+
+.mv-card p {
+    color: #64748B;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. SECCIÓN DE VALORES NUCLEARES
+   -------------------------------------------------------------------------- */
+
+.values-section {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+}
+
+.section-title {
+    font-weight: 800;
+    color: #1E293B;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+/* Grid de Valores (2 columnas) */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.value-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+/* Icono de Check Personalizado */
+.val-check {
+    background: #0F172A; /* Fondo Azul Oscuro (Corporativo) */
+    color: white;        /* Check blanco */
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    
+    /* Centrado del símbolo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-weight: bold;
+    flex-shrink: 0; /* Evita deformación */
+    margin-top: 2px;
+    font-size: 0.8rem;
+}
+
+.value-item h4 {
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0 0 5px 0;
+}
+
+.value-item p {
+    margin: 0;
+    color: #64748B;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   4. DISEÑO RESPONSIVO (MÓVILES)
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+    /* Ajustes del Hero */
+    .about-hero {
+        padding: 30px 20px;
+        text-align: center;
+        align-items: center;
+    }
+
+    /* Colapso de columnas a una sola fila */
+    .mv-container, 
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+}

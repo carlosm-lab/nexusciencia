@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Panel de Administración</div>
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+
+    <div class="admin-header-flex">
+        <div>
+            <h1 class="admin-title">Panel de Control</h1>
+            <p class="admin-subtitle">Bienvenido, <strong>{{ usuario }}</strong></p>
+        </div>
+
+        <div class="admin-header-actions" style="display: flex; gap: 0.75rem; align-items: center;">
+            <!-- Dark Mode Toggle Switch -->
+            <div class="theme-toggle-wrapper btn-dark-admin" style="border: 1px solid var(--border-color);">
+                <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <label class="theme-switch" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="theme-slider"></span>
+                </label>
+                <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </div>
+
+            <a href="/admin/sincronizar" class="btn-dark-admin" title="Limpiar registros de archivos borrados">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
+                </svg>
+                Sincronizar
+            </a>
+
+            <!-- Logout Button -->
+            <a href="{{ url_for('auth.logout') }}" class="btn-dark-admin"
+                style="background: #FEF2F2; border: 1px solid #FECACA; color: #EF4444;" title="Cerrar sesión">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Salir
+            </a>
+        </div>
+    </div>
+
+    {% if mensaje %}
+    <div id="system-alert" class="admin-alert {% if 'Error' in mensaje %}alert-error{% else %}alert-success{% endif %}"
+        role="alert">
+        {% if 'Error' in mensaje %}⚠️{% else %}✅{% endif %}
+        {{ mensaje }}
+    </div>
+    {% endif %}
+
+    <!-- Stats Grid -->
+    {% include 'components/stats_grid.html' %}
+
+    <div class="dashboard-grid">
+        <div class="upload-form-panel">
+            <h3 class="panel-title">🚀 Publicar Nuevo Artículo</h3>
+            <form action="/admin" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="form-group">
+                    <label class="admin-label">Título</label>
+                    <input type="text" name="titulo" class="admin-input" placeholder="Título académico..." required>
+                </div>
+                <div class="form-grid-2-compact">
+                    <div>
+                        <label class="admin-label">Slug</label>
+                        <input type="text" name="slug" class="admin-input" placeholder="url-amigable" required>
+                    </div>
+                    <div>
+                        <label class="admin-label">Categoría</label>
+                        <select name="categoria" class="admin-select" required>
+                            <option value="" selected disabled>Seleccionar...</option>
+                            {% for cat in todas_las_categorias %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="admin-label">Tags</label>
+                    <input type="text" name="tags" class="admin-input" placeholder="Ej: neurociencia, ansiedad">
+                </div>
+                <div class="media-links-box">
+                    <label class="admin-label label-accent">🔗 Enlaces Multimedia</label>
+                    <div class="media-inputs-grid">
+                        <input type="url" name="url_audio" class="admin-input" placeholder="https://.../audio.mp3">
+                        <input type="url" name="url_pdf" class="admin-input" placeholder="https://.../documento.pdf">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="admin-label">Archivos</label>
+                    <div class="file-upload-wrapper compact">
+                        <input type="file" name="html_file" class="admin-file-input" accept=".html" required>
+                        <div class="file-placeholder">📄 Seleccionar HTML</div>
+                    </div>
+                    <div class="file-upload-wrapper compact mt-2">
+                        <input type="file" name="css_file" class="admin-file-input" accept=".css">
+                        <div class="file-placeholder">🎨 Seleccionar CSS (Opcional)</div>
+                    </div>
+                </div>
+                <div class="form-submit-wrapper">
+                    <button type="submit" class="btn-dark-admin full-width">Publicar Artículo</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="metrics-panel">
+            <div class="stats-row">
+                <div class="mini-stat-card">
+                    <div class="stat-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="stat-number">{{ total_visitas }}</h3>
+                        <span class="stat-label">Visitas Totales</span>
+                    </div>
+                </div>
+                <div class="mini-stat-card">
+                    <div class="stat-icon-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="stat-number">{{ total_usuarios }}</h3>
+                        <span class="stat-label">Usuarios Registrados</span>
+                    </div>
+                </div>
+            </div>
+            <div class="logs-container-scroll">
+                <h4 class="logs-title">📜 Historial de Eventos</h4>
+                <ul class="activity-feed">
+                    {% for log in ultimos_eventos %}
+                    <li class="log-item">
+                        <span class="log-time">{{ log.fecha.strftime('%H:%M') }}</span>
+                        <div class="log-content">
+                            <span class="log-type badge-{{ log.tipo_evento }}">{{ log.tipo_evento|upper }}</span>
+                            <span class="log-desc">{{ log.detalle }}</span>
+                        </div>
+                        <span class="log-date-small">{{ log.fecha.strftime('%d/%m') }}</span>
+                    </li>
+                    {% else %}
+                    <li class="log-item empty-log">Sin actividad.</li>
+                    {% endfor %}
+                </ul>
+                {% if logs_pag and logs_pag.pages > 1 %}
+                <div class="logs-pagination">
+                    <div class="pagination-info">
+                        Página {{ logs_pag.page }} de {{ logs_pag.pages }}
+                    </div>
+                    <div class="pagination-controls">
+                        {% if logs_pag.has_prev %}
+                        <a href="{{ url_for('admin.admin', log_page=logs_pag.prev_num) }}" class="btn-pagination">«
+                            Anterior</a>
+                        {% endif %}
+                        {% if logs_pag.has_next %}
+                        <a href="{{ url_for('admin.admin', log_page=logs_pag.next_num) }}"
+                            class="btn-pagination">Siguiente »</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PANEL DE DIAGNÓSTICOS DEL SISTEMA -->
+    <!-- ============================================ -->
+    <div class="diagnostics-section mt-4">
+        <div class="diagnostics-header">
+            <h3 class="panel-title">🔧 Diagnósticos del Sistema</h3>
+            <button id="btn-run-all-checks" class="btn-dark-admin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Ejecutar Todos los Tests
+            </button>
+        </div>
+
+        <div class="diagnostics-summary" id="diagnostics-summary" style="display: none;">
+            <div class="summary-card">
+                <span class="summary-label">Salud del Sistema</span>
+                <span class="summary-score" id="health-score">--</span>
+            </div>
+            <div class="summary-stats">
+                <span class="stat-passed" id="stat-passed">✅ 0 pasados</span>
+                <span class="stat-failed" id="stat-failed">❌ 0 fallidos</span>
+                <span class="stat-errors" id="stat-errors">⚠️ 0 errores</span>
+            </div>
+        </div>
+
+        <div class="diagnostics-grid">
+            <!-- Database Check -->
+            <div class="diagnostic-card" data-check="database">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">🗄️</div>
+                    <div class="diagnostic-info">
+                        <h4>Base de Datos</h4>
+                        <p>Conexión y estado de BD</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-database">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/database">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-database"></div>
+            </div>
+
+            <!-- Config Check -->
+            <div class="diagnostic-card" data-check="config">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">⚙️</div>
+                    <div class="diagnostic-info">
+                        <h4>Configuración</h4>
+                        <p>Variables de entorno</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-config">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/config">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-config"></div>
+            </div>
+
+            <!-- Security Check -->
+            <div class="diagnostic-card" data-check="security">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">🔒</div>
+                    <div class="diagnostic-info">
+                        <h4>Seguridad</h4>
+                        <p>CSRF, cookies, rate limiting</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-security">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/security">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-security"></div>
+            </div>
+
+            <!-- Templates Check -->
+            <div class="diagnostic-card" data-check="templates">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">📄</div>
+                    <div class="diagnostic-info">
+                        <h4>Templates</h4>
+                        <p>Archivos HTML requeridos</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-templates">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/templates">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-templates"></div>
+            </div>
+
+            <!-- Static Files Check -->
+            <div class="diagnostic-card" data-check="static">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">🎨</div>
+                    <div class="diagnostic-info">
+                        <h4>Archivos Estáticos</h4>
+                        <p>CSS, JS, imágenes</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-static">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/static">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-static"></div>
+            </div>
+
+            <!-- Articles Integrity Check -->
+            <div class="diagnostic-card" data-check="articles">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">📚</div>
+                    <div class="diagnostic-info">
+                        <h4>Integridad Artículos</h4>
+                        <p>Archivos HTML de artículos</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-articles">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/articles">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-articles"></div>
+            </div>
+
+            <!-- Disk Space Check -->
+            <div class="diagnostic-card" data-check="disk">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">💾</div>
+                    <div class="diagnostic-info">
+                        <h4>Espacio en Disco</h4>
+                        <p>Almacenamiento disponible</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-disk">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/disk">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-disk"></div>
+            </div>
+
+            <!-- Log File Check -->
+            <div class="diagnostic-card" data-check="logs">
+                <div class="diagnostic-header">
+                    <div class="diagnostic-icon">📜</div>
+                    <div class="diagnostic-info">
+                        <h4>Archivo de Log</h4>
+                        <p>Estado y tamaño del log</p>
+                    </div>
+                    <div class="diagnostic-status" id="status-logs">
+                        <span class="status-pending">Pendiente</span>
+                    </div>
+                </div>
+                <button class="btn-run-check" data-endpoint="/api/diagnostics/logs">
+                    Ejecutar Test
+                </button>
+                <div class="diagnostic-result" id="result-logs"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="management-section">
+        <div class="library-toolbar">
+            <div class="library-header-group">
+                <h3 class="panel-title mb-0">Gestión de Biblioteca</h3>
+                <span class="count-badge">{{ articulos|length }} artículos</span>
+            </div>
+            <div class="library-controls">
+                <div class="toolbar-search-wrapper">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" class="toolbar-input" placeholder="Filtrar por título...">
+                </div>
+                <select id="sortSelect" class="toolbar-select">
+                    <option value="date-desc">📅 Fecha (Reciente)</option>
+                    <option value="date-asc">📅 Fecha (Antigua)</option>
+                    <option value="alpha-asc">🔤 Alfabético (A-Z)</option>
+                    <option value="alpha-desc">🔤 Alfabético (Z-A)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-card mt-3">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 management-table">
+                    <thead>
+                        <tr>
+                            <th>Título del Artículo</th>
+                            <th>Fecha</th>
+                            <th class="text-right">Gestionar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articlesTableBody">
+                        {% for art in articulos %}
+                        <tr class="article-row">
+                            <td class="article-title-cell">
+                                <a href="{{ url_for('main.ver_articulo', cat_slug=get_category_slug(art.categoria), slug=art.slug) }}"
+                                    style="text-decoration:none; color:inherit;">
+                                    <strong class="article-title">{{ art.titulo }}</strong>
+                                </a>
+                                <div class="article-slug">/{{ art.slug }}</div>
+                            </td>
+                            <td class="article-date-cell">
+                                {{ art.fecha.strftime('%d/%m/%Y') }}
+                            </td>
+                            <td class="text-right">
+                                <div class="d-inline-flex gap-1">
+                                    <a href="{{ url_for('admin.admin_editar', id=art.id) }}"
+                                        class="btn-action-sm btn-edit" title="Editar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </a>
+
+                                    <form action="{{ url_for('admin.admin_eliminar', id=art.id) }}" method="POST"
+                                        style="display: inline;" class="delete-form">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                        <button type="submit" class="btn-action-sm btn-delete" title="Eliminar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path
+                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr id="noResultsRow">
+                            <td colspan="3" class="empty-table-msg">No hay artículos publicados aún.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

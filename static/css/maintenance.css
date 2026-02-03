@@ -1,0 +1,104 @@
+/* ==========================================================================
+   NEXUS CIENCIA - HOJA DE ESTILOS: PANTALLA DE MANTENIMIENTO (MAINTENANCE.CSS)
+   ==========================================================================
+   Descripción: Estilos para la página de bloqueo de seguridad (Kill Switch).
+   Diseño minimalista y oscuro para indicar estado crítico o mantenimiento.
+   Nota: Este archivo es independiente y no carga el layout global.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. CONFIGURACIÓN GLOBAL Y CENTRADO
+   -------------------------------------------------------------------------- */
+
+body {
+    /* Fondo oscuro de seguridad (Slate Dark - Coherente con variables globales) */
+    background-color: #0F172A;
+    color: #E2E8F0;
+    
+    /* Tipografía del sistema para carga rápida */
+    font-family: system-ui, -apple-system, sans-serif;
+    
+    /* Configuración de pantalla completa */
+    height: 100vh;
+    margin: 0;
+    
+    /* Centrado absoluto del contenido (Flexbox) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   2. CONTENEDOR PRINCIPAL (TARJETA)
+   -------------------------------------------------------------------------- */
+
+.lock-container {
+    max-width: 600px;
+    padding: 40px;
+    
+    /* Efecto de cristal oscuro */
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    
+    /* Sombra profunda para dar sensación de flotación */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   3. ICONOGRAFÍA Y ANIMACIÓN
+   -------------------------------------------------------------------------- */
+
+.icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    
+    /* Animación de latido para indicar que el sistema está "vivo" pero bloqueado */
+    animation: pulse 2s infinite;
+}
+
+/* Definición de la animación de latido */
+@keyframes pulse {
+    0% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1.1); 
+        opacity: 0.8; 
+    }
+    100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+}
+
+/* --------------------------------------------------------------------------
+   4. TIPOGRAFÍA Y MENSAJES
+   -------------------------------------------------------------------------- */
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #EF4444; /* Rojo Alerta para captar atención inmediata */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #94A3B8; /* Texto secundario (Slate Lighter) */
+    line-height: 1.6;
+}
+
+/* Caja de Código de Estado (Estilo Terminal) */
+.code {
+    margin-top: 30px;
+    font-family: monospace;
+    background: #000000;
+    padding: 10px;
+    border-radius: 5px;
+    color: #10B981; /* Verde Matrix/Terminal */
+    font-size: 0.9rem;
+}

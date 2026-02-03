@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ articulo.titulo}} | Nexus Ciencia{% endblock %}
+{% block description %}{% if articulo.descripcion %}{{ articulo.descripcion }}{% else %}{{ articulo.titulo }}. Artículo
+científico de {{ articulo.categoria }} en NexusCiencia. Tiempo de lectura: {{ tiempo_lectura }} minutos.{% endif %}{%
+endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ articulo.titulo }}{% endblock %}
+{% block og_description %}Lee este artículo sobre {{ articulo.categoria }} en Nexus Ciencia{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/article.css') }}">
+{% if tiene_css %}
+{# REMEDIACIÓN LOW-002: Cache-busting con timestamp de modificación #}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='articulos_css/' + articulo.slug + '.css') }}{% if css_version %}?v={{ css_version }}{% endif %}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="focus-mode-wrapper">
+
+    <div class="paper-sheet">
+
+        <a href="/" class="btn-close-focus" title="Cerrar lectura" onclick="history.back(); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </a>
+
+        <div class="paper-header">
+            <span class="badge-cat">{{ articulo.categoria }}</span>
+            <h1 class="paper-title">{{ articulo.titulo }}</h1>
+
+            <div class="paper-meta">
+                <span>📅 {{ articulo.fecha.strftime('%d %b, %Y') }}</span>
+                <span>⏱️ {{ tiempo_lectura }} min lectura</span>
+            </div>
+
+            {% if articulo.url_audio %}
+            <div class="audio-player-container">
+                <div class="audio-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                    <span>Escuchar Podcast</span>
+                </div>
+                <audio controls class="native-audio" style="width: 100%; margin-top: 10px;">
+                    <source src="{{ articulo.url_audio }}" type="audio/mpeg">
+                    Tu navegador no soporta el elemento de audio.
+                </audio>
+            </div>
+            {% endif %}
+
+            <div class="action-bar">
+
+                <a href="{{ articulo.url_pdf if articulo.url_pdf else 'javascript:void(0);' }}" target="_blank"
+                    class="btn-save btn-pdf" data-available="{{ 'true' if articulo.url_pdf else 'false' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Descargar PDF
+                </a>
+
+                {% if session.get('user_email') %}
+                <button id="btn-save-action" class="btn-save {% if esta_guardado %}saved{% endif %}"
+                    data-id="{{ articulo.id }}" data-available="true">
+                    {% if esta_guardado %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                        fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Guardado
+                    {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Guardar en Biblioteca
+                    {% endif %}
+                </button>
+                {% else %}
+                <button class="btn-save" data-bs-toggle="modal" data-bs-target="#loginModal" data-available="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Guardar Artículo
+                </button>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class="paper-content">
+            {% if contenido_html %}
+            {{ contenido_html | safe }}
+            {% else %}
+            {% include 'articulos/' + articulo.nombre_archivo ignore missing %}
+            {% endif %}
+        </div>
+
+        <div class="paper-footer">
+            <h5 class="related-title">Etiquetas</h5>
+            <div class="related-tags">
+                {% for tag in articulo.tags.split(',') %}
+                {% set tag_slug = tag.strip().lower().replace(' ', '-') %}
+                <a href="{{ url_for('main.ver_tag', slug=tag_slug) }}" class="tag-pill">#{{ tag.strip() }}</a>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-custom">
+            <div class="modal-header-custom">
+                <div class="modal-icon-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <h3 style="font-weight: 800; margin: 0;">¡Guarda este artículo!</h3>
+            </div>
+            <div class="modal-body" style="padding: 30px; text-align: center;">
+                <p style="color: #6B7280; font-size: 1rem; margin-bottom: 25px;">
+                    Inicia sesión con tu cuenta de Google para crear tu propia biblioteca de investigación.
+                </p>
+                <a href="/login" class="btn-google-modal">Continuar con Google</a>
+            </div>
+            <div class="modal-footer"
+                style="background: #F9FAFB; border-top: 1px solid #E5E7EB; justify-content: center; padding: 15px;">
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal"
+                    style="color: #6B7280; text-decoration: none; font-size: 0.9rem;">
+                    No gracias, solo quiero leer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/article.js') }}"></script>
+
+<!-- JSON-LD Structured Data: ScholarlyArticle (Auditoría SEO 3.3) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "{{ articulo.titulo }}",
+    "name": "{{ articulo.titulo }}",
+    "author": {
+        "@type": "Organization",
+        "name": "NexusCiencia",
+        "url": "{{ request.url_root.rstrip('/') }}"
+    },
+    "datePublished": "{{ articulo.fecha.strftime('%Y-%m-%d') }}",
+    "dateModified": "{{ (articulo.updated_at or articulo.fecha).strftime('%Y-%m-%d') }}",
+    {% if articulo.descripcion %}"abstract": "{{ articulo.descripcion }}",{% endif %}
+    "articleSection": "{{ articulo.categoria }}",
+    "keywords": "{{ articulo.tags }}",
+    "url": "{{ request.url_root.rstrip('/') }}/categoria/{{ categoria_slug }}/{{ articulo.slug }}",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ request.url_root.rstrip('/') }}/categoria/{{ categoria_slug }}/{{ articulo.slug }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "NexusCiencia",
+        "url": "{{ request.url_root.rstrip('/') }}",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url_for('static', filename='img/favicon.ico', _external=True) }}"
+        }
+    },
+    "isAccessibleForFree": true,
+    "inLanguage": "es"
+}
+</script>
+
+<!-- JSON-LD Breadcrumbs (Auditoría SEO 1.6) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Inicio",
+            "item": "{{ request.url_root.rstrip('/') }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Categorías",
+            "item": "{{ request.url_root.rstrip('/') }}/categorias"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ articulo.categoria }}",
+            "item": "{{ request.url_root.rstrip('/') }}/categoria/{{ categoria_slug }}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "{{ articulo.titulo }}"
+        }
+    ]
+}
+</script>
+{% endblock %}

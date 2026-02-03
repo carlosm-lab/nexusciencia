@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Página No Encontrada - Nexus Ciencia{% endblock %}
+{% block description %}La página que buscas no existe o ha sido movida.{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="error-container">
+
+    <div class="error-illustration">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none"
+            stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+    </div>
+
+    <h1 class="error-code">404</h1>
+    <h2 class="error-title">Página no encontrada</h2>
+
+    <p class="error-description">
+        Lo sentimos, la página o artículo que buscas no existe, ha sido movida o eliminada.
+        Verifica la URL o vuelve al inicio.
+    </p>
+
+    <div class="error-actions">
+        <a href="{{ url_for('main.inicio') }}" class="btn-error-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Volver al Dashboard
+        </a>
+        <button onclick="history.back()" class="btn-error-secondary">
+            ← Regresar
+        </button>
+    </div>
+
+    <div class="error-suggestions">
+        <p class="suggestions-title">¿Buscabas algo más?</p>
+        <ul class="suggestions-list">
+            <li><a href="{{ url_for('main.inicio') }}?q=">Explorar artículos</a></li>
+            <li><a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}">Contactar soporte</a></li>
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}

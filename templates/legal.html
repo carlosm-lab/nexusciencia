@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}Aviso Legal | NexusCiencia{% endblock %}
+{% block description %}Aviso legal de NexusCiencia. Identidad del titular, condiciones de uso, propiedad intelectual y
+exención de responsabilidad.{% endblock %}
+{% block og_title %}Aviso Legal | NexusCiencia{% endblock %}
+{% block og_description %}Términos legales, condiciones de uso y propiedad intelectual de NexusCiencia.{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/legal.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Aviso Legal</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="legal-layout">
+
+    <aside class="legal-sidebar">
+        <div class="toc-card">
+            <h3 class="toc-title">Tabla de Contenidos</h3>
+            <nav class="toc-nav">
+                <a href="#intro" class="toc-link">1. Introducción</a>
+                <a href="#identity" class="toc-link">2. Identidad del Titular</a>
+                <a href="#ieproes" class="toc-link highlight-link">3. Relación con IEPROES</a>
+                <a href="#purpose" class="toc-link">4. Finalidad del Sitio</a>
+                <a href="#conditions" class="toc-link">5. Condiciones de Uso</a>
+                <a href="#liability" class="toc-link">6. Responsabilidad</a>
+                <a href="#ip" class="toc-link">7. Propiedad Intelectual</a>
+                <a href="#contact" class="toc-link">8. Contacto Legal</a>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="legal-content">
+
+        <section id="intro" class="legal-section first-section">
+            <div class="section-header">
+                <div class="icon-box">📄</div>
+                <h2>1. Introducción</h2>
+            </div>
+            <p>
+                El presente documento tiene por objeto regular el acceso y uso del sitio web <strong>Nexus
+                    Ciencia</strong>. El acceso al sitio implica la aceptación sin reservas de las presentes
+                condiciones. Este Aviso Legal cumple con las normativas vigentes en materia de servicios de la sociedad
+                de la información y comercio electrónico.
+            </p>
+        </section>
+
+        <section id="identity" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">⚖️</div>
+                <h2>2. Identidad del Titular</h2>
+            </div>
+            <p>En cumplimiento con el deber de información, se exponen los datos identificativos del titular del sitio
+                web:</p>
+            <ul class="legal-list">
+                <li><strong>Titular:</strong> Carlos Molina (Nexus Ciencia)</li>
+                <li><strong>Domicilio Social:</strong> San Salvador, El Salvador</li>
+                <li><strong>Actividad:</strong> Divulgación científica y repositorio académico.</li>
+                <li><strong>Email de Contacto:</strong> admin@nexusciencia.com</li>
+            </ul>
+        </section>
+
+        <section id="ieproes" class="legal-section highlight-section">
+            <div class="section-header">
+                <div class="icon-box">🎓</div>
+                <h2>3. Relación Institucional con IEPROES</h2>
+            </div>
+            <p>
+                <strong>Nexus Ciencia</strong> declara que opera como una iniciativa independiente de apoyo académico.
+                Aunque nuestro contenido está alineado con los estándares de excelencia del <strong>Instituto
+                    Especializado de Profesionales de la Salud (IEPROES)</strong>, esta plataforma no es el sitio web
+                oficial de dicha institución ni la representa legalmente.
+            </p>
+            <p>
+                Nuestra relación se basa en la colaboración académica y el fomento a la investigación, sirviendo como
+                herramienta complementaria para estudiantes y docentes.
+            </p>
+        </section>
+
+        <section id="purpose" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">🎯</div>
+                <h2>4. Finalidad del Sitio Web</h2>
+            </div>
+            <p>
+                La finalidad de Nexus Ciencia es proporcionar acceso gratuito y organizado a artículos científicos,
+                papers y recursos académicos en las áreas de Psicología, Neurociencia y Comportamiento, facilitando la
+                labor investigativa de la comunidad hispanohablante.
+            </p>
+        </section>
+
+        <section id="conditions" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">📝</div>
+                <h2>5. Condiciones de Uso</h2>
+            </div>
+            <p>El usuario se compromete a hacer un uso adecuado de los contenidos y servicios, y a no emplearlos para:
+            </p>
+            <ul class="legal-list">
+                <li>Incurrir en actividades ilícitas, ilegales o contrarias a la buena fe.</li>
+                <li>Difundir contenido racista, xenófobo o que atente contra los derechos humanos.</li>
+                <li>Provocar daños en los sistemas físicos y lógicos de Nexus Ciencia.</li>
+                <li>Intentar acceder a cuentas de otros usuarios o áreas restringidas (Admin).</li>
+            </ul>
+        </section>
+
+        <section id="liability" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">🛡️</div>
+                <h2>6. Exención de Responsabilidad</h2>
+            </div>
+            <p><strong>Contenido:</strong> Nexus Ciencia no se hace responsable de la exactitud, exhaustividad o
+                vigencia de los artículos científicos indexados, los cuales pertenecen a sus respectivos autores.</p>
+            <p><strong>Enlaces Externos:</strong> No asumimos responsabilidad por el contenido de enlaces a terceros
+                (Google, Universidades, etc.) que puedan aparecer en la plataforma.</p>
+            <p><strong>Fallos Técnicos:</strong> No garantizamos la inexistencia de interrupciones o errores en el
+                acceso a la web, aunque nos esforzamos por evitarlos.</p>
+        </section>
+
+        <section id="ip" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">©️</div>
+                <h2>7. Propiedad Intelectual</h2>
+            </div>
+            <p>
+                El código fuente, diseño gráfico, logotipos y arquitectura de software de Nexus Ciencia son propiedad
+                exclusiva de <strong>Carlos Molina</strong>.
+            </p>
+            <p>
+                Los artículos científicos alojados se rigen por sus propias licencias (generalmente Creative Commons o
+                Acceso Abierto). El usuario debe respetar la autoría original al citarlos.
+            </p>
+        </section>
+
+        <section id="contact" class="legal-section">
+            <div class="section-header">
+                <div class="icon-box">📨</div>
+                <h2>8. Datos para Reclamaciones</h2>
+            </div>
+            <p>
+                Cualquier usuario podrá realizar reclamaciones dirigiéndose a la dirección electrónica indicada arriba,
+                indicando el motivo de la misma y aportando la documentación pertinente.
+            </p>
+        </section>
+
+        <div class="last-updated">
+            Última actualización: <strong>2 de Diciembre de 2025</strong>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

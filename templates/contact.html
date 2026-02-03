@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacto | NexusCiencia{% endblock %}
+{% block description %}Contacta con el equipo de NexusCiencia. Soporte técnico, consultas académicas, propuestas de
+colaboración y sugerencias de contenido.{% endblock %}
+{% block og_title %}Contacto | NexusCiencia{% endblock %}
+{% block og_description %}Formulario de contacto y red de especialistas disponibles para consultas académicas.{%
+endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+{% endblock %}
+
+{% block header_title %}
+<div class="header-category-title">Contacto</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="contact-layout">
+
+    <div class="form-section">
+        <div class="form-card">
+            <h2 class="form-title">Envíanos un mensaje</h2>
+
+            <form id="contactForm" class="nexus-form">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="subject">Asunto</label>
+                        <input type="text" id="subject" name="subject" placeholder="Breve descripción" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Tipo de Consulta</label>
+                        <select id="type" name="type" required>
+                            <option value="" disabled selected>Selecciona una opción...</option>
+                            <option value="tech">Error Técnico / Bug</option>
+                            <option value="academic">Contacto Académico</option>
+                            <option value="collab">Propuesta de Colaboración</option>
+                            <option value="content">Sugerencia de Contenido</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Describe tu consulta en detalle..."
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="file-label">
+                        <input type="file" id="attachment" name="attachment" class="file-input">
+                        <span class="file-custom">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                                </path>
+                            </svg>
+                            Adjuntar archivo (Opcional)
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span class="btn-text">Enviar Mensaje</span>
+                    <span class="btn-loader"></span>
+                    <span class="btn-success-icon">✓</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="visual-section">
+        <div class="illustration-box">
+            <div class="illustration-content">
+                <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" class="contact-svg">
+                    <circle cx="250" cy="250" r="200" fill="#EFF6FF" />
+                    <path d="M150 250L220 320L350 180" stroke="#3B82F6" stroke-width="20" stroke-linecap="round"
+                        stroke-linejoin="round" opacity="0.1" />
+                    <rect x="140" y="160" width="220" height="160" rx="20" fill="white" stroke="#3B82F6"
+                        stroke-width="8" />
+                    <circle cx="200" cy="240" r="20" fill="#CBD5E1" />
+                    <rect x="240" y="225" width="80" height="10" rx="5" fill="#E2E8F0" />
+                    <rect x="240" y="245" width="50" height="10" rx="5" fill="#E2E8F0" />
+                    <path d="M320 320L360 360" stroke="#3B82F6" stroke-width="8" stroke-linecap="round" />
+                    <circle cx="380" cy="140" r="30" fill="#10B981" opacity="0.8" />
+                    <circle cx="120" cy="360" r="20" fill="#F59E0B" opacity="0.8" />
+                </svg>
+
+                <div class="visual-text">
+                    <h3>Soporte Académico</h3>
+                    <p>Nuestro equipo revisa cada solicitud personalmente. Espera una respuesta en menos de 24 horas
+                        hábiles.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="specialists-section">
+    <h2 class="section-heading-small">Red de Especialistas</h2>
+    <p class="section-sub">Profesionales disponibles para consultas académicas directas.</p>
+
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-cover"></div>
+            <div class="team-avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Sofia+L&background=F59E0B&color=fff&size=128"
+                    class="team-avatar" alt="Dra. Sofia López">
+            </div>
+            <div class="team-info">
+                <div class="team-name">Dra. Sofia López</div>
+                <div class="team-role">Psicología Clínica</div>
+                <p class="team-bio">Especialista en trastornos de ansiedad y estrés postraumático.</p>
+            </div>
+        </div>
+
+        <div class="team-card">
+            <div class="team-cover"></div>
+            <div class="team-avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Jorge+M&background=10B981&color=fff&size=128"
+                    class="team-avatar" alt="Dr. Jorge Méndez">
+            </div>
+            <div class="team-info">
+                <div class="team-name">Dr. Jorge Méndez</div>
+                <div class="team-role">Neurociencia Cognitiva</div>
+                <p class="team-bio">Investigador de procesos de memoria y aprendizaje en adultos.</p>
+            </div>
+        </div>
+
+        <div class="team-card">
+            <div class="team-cover"></div>
+            <div class="team-avatar-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Elena+T&background=8B5CF6&color=fff&size=128"
+                    class="team-avatar" alt="Lic. Elena Torres">
+            </div>
+            <div class="team-info">
+                <div class="team-name">Lic. Elena Torres</div>
+                <div class="team-role">Psicología Social</div>
+                <p class="team-bio">Experta en dinámicas de grupo y comportamiento colectivo.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-footer-section">
+    <h2 class="section-heading-small">Preguntas Frecuentes</h2>
+
+    <div class="accordion">
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>¿Cuál es el tiempo de respuesta promedio?</span>
+                <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </button>
+            <div class="accordion-body">
+                <p>Generalmente respondemos a todas las consultas académicas y técnicas en un plazo de 24 a 48 horas
+                    hábiles.</p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>Encontré un error en un artículo, ¿cómo lo reporto?</span>
+                <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </button>
+            <div class="accordion-body">
+                <p>Por favor, selecciona "Error Técnico / Bug" en el formulario. Indica el título del artículo y, si es
+                    posible, adjunta una captura de pantalla.</p>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>¿Puedo colaborar publicando mi investigación?</span>
+                <svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </button>
+            <div class="accordion-body">
+                <p>Sí, estamos abiertos a colaboraciones. Selecciona "Propuesta de Colaboración" y envíanos un resumen
+                    de tu trabajo para evaluarlo.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/contact.js') }}"></script>
+
+<!-- JSON-LD FAQPage Schema (Auditoría SEO 3.3 - Rich Snippets) -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "¿Cuál es el tiempo de respuesta promedio?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Generalmente respondemos a todas las consultas académicas y técnicas en un plazo de 24 a 48 horas hábiles."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Encontré un error en un artículo, ¿cómo lo reporto?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Por favor, selecciona 'Error Técnico / Bug' en el formulario. Indica el título del artículo y, si es posible, adjunta una captura de pantalla."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "¿Puedo colaborar publicando mi investigación?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sí, estamos abiertos a colaboraciones. Selecciona 'Propuesta de Colaboración' y envíanos un resumen de tu trabajo para evaluarlo."
+            }
+        }
+    ]
+}
+</script>
+
+<!-- JSON-LD ContactPage Schema -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contacto - NexusCiencia",
+    "description": "Formulario de contacto para consultas académicas, soporte técnico y colaboraciones.",
+    "url": "{{ request.url_root.rstrip('/') }}/info/contacto",
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "NexusCiencia",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": "Spanish"
+        }
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,107 @@
+/* Dark Mode Variables and Styles */
+
+/* Dark mode CSS variables */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --color-bg-main: #0f172a;
+    --color-bg-sidebar: #1e293b;
+    --color-bg-card: #1e293b;
+    --color-bg-hover: #334155;
+    
+    /* Text */
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    
+    /* Borders */
+    --color-border: #334155;
+    
+    /* Accents */
+    --color-accent: #60a5fa;
+    --color-accent-hover: #3b82f6;
+}
+
+/* Apply dark mode styles */
+[data-theme="dark"] body {
+    background-color: var(--color-bg-main);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .sidebar {
+    background-color: var(--color-bg-sidebar);
+    border-right-color: var(--color-border);
+}
+
+[data-theme="dark"] .main-content {
+    background-color: var(--color-bg-main);
+}
+
+[data-theme="dark"] .book-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .table-card {
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] .menu-item {
+    color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .menu-item:hover,
+[data-theme="dark"] .menu-item.active {
+    background-color: var(--color-bg-hover);
+    color: var(--color-accent);
+}
+
+[data-theme="dark"] .top-header {
+    background-color: var(--color-bg-sidebar);
+    border-bottom-color: var(--color-border);
+}
+
+/* Dark mode toggle button styling */
+.theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.theme-toggle-btn:hover {
+    background-color: #f1f5f9;
+    color: #3b82f6;
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background-color: #334155;
+    color: #60a5fa;
+}
+
+.theme-toggle-btn svg {
+    flex-shrink: 0;
+}
+
+.theme-toggle-btn .link-text {
+    display: inline;
+}
+
+/* Hide/show icons based on theme */
+[data-theme="dark"] .theme-icon-light {
+    display: none;
+}
+
+[data-theme="dark"] .theme-icon-dark {
+    display: block !important;
+}
