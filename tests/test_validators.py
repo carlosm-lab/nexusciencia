@@ -116,9 +116,9 @@ class TestValidarSlug:
         assert validar_slug('a' * 200) == True  # Exactamente 200
         assert validar_slug('a' * 201) == False  # Excede límite
     
-    def test_normaliza_mayusculas(self):
-        """Debe aceptar slugs con mayúsculas (se normalizan internamente)"""
-        # La función convierte a minúsculas antes de validar
-        assert validar_slug('Mi-Articulo') == True
-        assert validar_slug('ARTICULO-GRANDE') == True
+    def test_rechaza_mayusculas(self):
+        """Debe rechazar slugs con mayúsculas (seguridad: no normalizar silenciosamente)"""
+        # REMEDIACIÓN AUD-011: Los slugs deben ser estrictamente minúsculas
+        assert validar_slug('Mi-Articulo') == False
+        assert validar_slug('ARTICULO-GRANDE') == False
 

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class Articulo(db.Model):
-    """Modelo de artículo científico"""
+    """Modelo de artículo educativo"""
     
     __tablename__ = 'articulo'
     

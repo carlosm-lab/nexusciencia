@@ -413,54 +413,33 @@
         min-height: 50vh;
         padding: 3rem 1.5rem;
     }
-    
+
     .hero-cta {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn-hero-primary,
     .btn-hero-secondary {
         width: 100%;
         justify-content: center;
     }
-    
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
-    
+
     .stat-card {
         padding: 1.5rem 1rem;
     }
-    
+
     .stat-number {
         font-size: 2rem;
     }
-    
+
     .categories-grid,
     .articles-grid {
         grid-template-columns: 1fr;
     }
-}
-
-/* Dark Mode */
-[data-theme="dark"] .hero-section {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-}
-
-[data-theme="dark"] .stat-card {
-    background: var(--bg-card);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="dark"] .category-card,
-[data-theme="dark"] .article-card {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .btn-hero-primary {
-    background: white;
-    color: #1a1a2e;
 }

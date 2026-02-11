@@ -2,11 +2,11 @@
 
 {% block title %}{{ categoria_nombre }} | NexusCiencia{% endblock %}
 
-{% block description %}Artículos científicos sobre {{ categoria_nombre }}. Explora {{ total_articulos }} publicaciones
+{% block description %}Artículos educativos sobre {{ categoria_nombre }}. Explora {{ total_articulos }} publicaciones
 académicas en esta área de psicología.{% endblock %}
 
 {% block og_title %}{{ categoria_nombre }} | NexusCiencia{% endblock %}
-{% block og_description %}{{ total_articulos }} artículos científicos sobre {{ categoria_nombre }}{% endblock %}
+{% block og_description %}{{ total_articulos }} artículos educativos sobre {{ categoria_nombre }}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
@@ -120,7 +120,7 @@ académicas en esta área de psicología.{% endblock %}
         <div class="category-hero-icon">{{ categoria_emoji }}</div>
         <div class="category-hero-text">
             <h1>{{ categoria_nombre }}</h1>
-            <p>Explora artículos científicos en esta área de estudio</p>
+            <p>Explora artículos educativos en esta área de estudio</p>
             <div class="category-stats">
                 <div class="category-stat">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -244,7 +244,7 @@ académicas en esta área de psicología.{% endblock %}
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "{{ categoria_nombre }}",
-    "description": "Artículos científicos sobre {{ categoria_nombre }} en NexusCiencia",
+    "description": "Artículos educativos sobre {{ categoria_nombre }} en NexusCiencia",
     "url": "{{ request.url_root.rstrip('/') }}{{ url_for('main.ver_categoria', slug=categoria_slug) }}",
     "breadcrumb": {
         "@type": "BreadcrumbList",

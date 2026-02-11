@@ -99,11 +99,12 @@ class Config:
     #   Permite picos de tráfico sin rechazar peticiones
     # =========================================================================
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # REMEDIACIÓN AUD-013: Opciones base sin pool_size/max_overflow
+    # SQLite usa StaticPool/NullPool que no acepta estos argumentos.
+    # pool_size y max_overflow se configuran solo en ProductionConfig (MySQL).
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_recycle': 3600,
         'pool_pre_ping': True,
-        'pool_size': 10,
-        'max_overflow': 20
     }
     
     # CSRF Protection
@@ -187,6 +188,14 @@ class ProductionConfig(Config):
     
     # Rate limiting activo en producción
     RATELIMIT_ENABLED = True
+    
+    # Pool de conexiones optimizado para MySQL en producción
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_recycle': 3600,
+        'pool_pre_ping': True,
+        'pool_size': 10,
+        'max_overflow': 20,
+    }
     
     # Rate limiting con Redis (más robusto que memoria)
     # Usa Redis si está disponible, fallback a memoria con warning

@@ -7,7 +7,7 @@
 # -----------------------------------------------------------------------------
 # STAGE 1: Builder - Instalación de dependencias
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim AS builder
+FROM python:3.13-slim AS builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -29,7 +29,7 @@ RUN pip install --user --no-warn-script-location -r requirements.txt
 # -----------------------------------------------------------------------------
 # STAGE 2: Runtime - Imagen final optimizada
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim AS runtime
+FROM python:3.13-slim AS runtime
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \

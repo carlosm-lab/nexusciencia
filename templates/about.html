@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Sobre Nosotros | NexusCiencia - Repositorio Científico{% endblock %}
-{% block description %}Conoce al equipo detrás de NexusCiencia, el repositorio científico de psicología. Nuestra misión
+{% block title %}Sobre Nosotros | NexusCiencia - Repositorio Educativo{% endblock %}
+{% block description %}Conoce al equipo detrás de NexusCiencia, el repositorio educativo de psicología. Nuestra misión
 es democratizar el acceso al conocimiento académico.{% endblock %}
 {% block og_title %}Sobre Nosotros | NexusCiencia{% endblock %}
-{% block og_description %}Conoce al equipo y la misión de NexusCiencia, el repositorio científico de psicología en
+{% block og_description %}Conoce al equipo y la misión de NexusCiencia, el repositorio educativo de psicología en
 español.{% endblock %}
 
 {% block styles %}
@@ -18,7 +18,7 @@ español.{% endblock %}
 {% block content %}
 
 <!-- H1 para SEO -->
-<h1 class="visually-hidden">Sobre NexusCiencia - Equipo y Misión del Repositorio Científico</h1>
+<h1 class="visually-hidden">Sobre NexusCiencia - Equipo y Misión del Repositorio Educativo</h1>
 
 <div class="history-section">
     <div class="section-label">Nuestra Historia</div>
@@ -33,17 +33,17 @@ español.{% endblock %}
                 </h3>
                 <p style="color: #64748B; font-size: 1.1rem; line-height: 1.8; margin-bottom: 0;">
                     NexusCiencia nació de una necesidad real: democratizar el acceso al conocimiento
-                    científico en psicología para estudiantes, profesionales y entusiastas de habla
+                    educativo en psicología para estudiantes, profesionales y entusiastas de habla
                     hispana. Fundado en 2024, nuestro repositorio reúne artículos académicos cuidadosamente
                     seleccionados sobre neurociencia, psicología clínica, comportamiento humano y salud mental.
                     <br><br>
-                    Creemos que el conocimiento científico no debe estar detrás de barreras económicas.
+                    Creemos que el conocimiento educativo no debe estar detrás de barreras económicas.
                     Por eso, cada artículo en nuestra plataforma es de acceso completamente gratuito.
                     Nuestro equipo de psicólogos y neurocientíficos revisa y curar el contenido para
                     garantizar su rigor académico y relevancia práctica.
                     <br><br>
                     Nuestra visión para 2030 es convertirnos en la referencia número uno de contenido
-                    científico de psicología en español, sirviendo a millones de estudiantes y
+                    educativo de psicología en español, sirviendo a millones de estudiantes y
                     profesionales en Latinoamérica y España.
                 </p>
             </div>
@@ -60,7 +60,7 @@ español.{% endblock %}
                     <div class="team-name">Carlos Molina</div>
                     <div class="team-role">Fundador & CEO</div>
                     <p class="team-bio">
-                        Ingeniero de Software y apasionado por la divulgación científica. Arquitecto principal de la
+                        Ingeniero de Software y apasionado por la divulgación educativa. Arquitecto principal de la
                         plataforma Nexus y defensor del código abierto.
                     </p>
 
@@ -131,7 +131,7 @@ español.{% endblock %}
     "alternateName": "Nexus Ciencia",
     "url": "{{ request.url_root.rstrip('/') }}",
     "logo": "{{ url_for('static', filename='img/favicon.ico', _external=True) }}",
-    "description": "Repositorio científico de artículos de psicología. Democratizamos el acceso al conocimiento académico.",
+    "description": "Repositorio educativo de artículos de psicología. Democratizamos el acceso al conocimiento académico.",
     "foundingDate": "2024",
     "sameAs": [],
     "contactPoint": {
@@ -146,7 +146,7 @@ español.{% endblock %}
         "Psicología Clínica",
         "Salud Mental",
         "Comportamiento Humano",
-        "Investigación Científica"
+        "Investigación Académica"
     ]
 }
 </script>
@@ -157,7 +157,7 @@ español.{% endblock %}
     "@context": "https://schema.org",
     "@type": "AboutPage",
     "name": "Sobre Nosotros - NexusCiencia",
-    "description": "Conoce al equipo detrás de NexusCiencia, el repositorio científico de psicología.",
+    "description": "Conoce al equipo detrás de NexusCiencia, el repositorio educativo de psicología.",
     "url": "{{ request.url_root.rstrip('/') }}/info/nosotros",
     "mainEntity": {
         "@type": "Organization",

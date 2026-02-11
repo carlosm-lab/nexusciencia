@@ -17,6 +17,7 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(120))
     fecha_registro = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     fecha_ultimo_login = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    acceso_edu = db.Column(db.Boolean, default=False)  # True si tiene correo .edu o aprobado por admin
     
     # Relaciones: ORDEN DESCENDENTE (Global para la biblioteca personal)
     articulos_guardados = db.relationship(

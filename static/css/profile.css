@@ -117,15 +117,6 @@
     transform: translateY(-1px);
 }
 
-/* Theme toggle específico - borde visible */
-.profile-action-btn.theme-toggle-wrapper {
-    border: 1px solid var(--border-color, #E2E8F0);
-}
-
-.profile-action-btn.theme-toggle-wrapper:hover {
-    border-color: #CBD5E1;
-}
-
 .profile-action-btn span {
     white-space: nowrap;
 }
@@ -139,36 +130,6 @@
 .profile-action-btn-danger:hover {
     background: #FEE2E2;
     border-color: #FCA5A5;
-}
-
-/* Dark mode support */
-[data-theme="dark"] .profile-action-btn {
-    border-color: var(--border-color);
-    color: var(--text-primary);
-}
-
-[data-theme="dark"] .profile-action-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .profile-action-btn-danger {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: rgba(239, 68, 68, 0.3);
-    color: #F87171;
-}
-
-[data-theme="dark"] .profile-action-btn-danger:hover {
-    background: rgba(239, 68, 68, 0.15);
-}
-
-/* Theme toggle dark mode - borde visible */
-[data-theme="dark"] .profile-action-btn.theme-toggle-wrapper {
-    border-color: var(--border-color);
-}
-
-[data-theme="dark"] .profile-action-btn.theme-toggle-wrapper:hover {
-    border-color: var(--border-color);
 }
 
 /* Responsive */

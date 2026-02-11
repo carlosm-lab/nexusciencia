@@ -8,6 +8,8 @@ from .notificacion import Notificacion
 from .log import LogActividad
 from .categoria import Categoria
 from .biblioteca import biblioteca
+from .fuente import FuenteAcademica
+from .caso import CasoClinico
 
 __all__ = [
     'Articulo',
@@ -15,5 +17,7 @@ __all__ = [
     'Notificacion',
     'LogActividad',
     'Categoria',
-    'biblioteca'
+    'biblioteca',
+    'FuenteAcademica',
+    'CasoClinico'
 ]

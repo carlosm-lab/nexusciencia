@@ -2,11 +2,11 @@
 
 {% block title %}{{ tag_display }} | Etiquetas | NexusCiencia{% endblock %}
 
-{% block description %}Artículos científicos sobre {{ tag_display }}. Encuentra {{ total_articulos }} publicaciones
+{% block description %}Artículos educativos sobre {{ tag_display }}. Encuentra {{ total_articulos }} publicaciones
 relacionadas con {{ tag_display }} en NexusCiencia.{% endblock %}
 
 {% block og_title %}{{ tag_display }} | Etiquetas | NexusCiencia{% endblock %}
-{% block og_description %}{{ total_articulos }} artículos científicos sobre {{ tag_display }}{% endblock %}
+{% block og_description %}{{ total_articulos }} artículos educativos sobre {{ tag_display }}{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
@@ -189,7 +189,7 @@ relacionadas con {{ tag_display }} en NexusCiencia.{% endblock %}
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "{{ tag_display }}",
-    "description": "Artículos científicos sobre {{ tag_display }} en NexusCiencia",
+    "description": "Artículos educativos sobre {{ tag_display }} en NexusCiencia",
     "url": "{{ request.url_root.rstrip('/') }}{{ url_for('main.ver_tag', slug=tag_slug) }}",
     "breadcrumb": {
         "@type": "BreadcrumbList",

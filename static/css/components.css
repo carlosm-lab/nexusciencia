@@ -153,29 +153,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   4. DARK MODE OVERRIDES
-   -------------------------------------------------------------------------- */
-
-[data-theme="dark"] .pagination-nexus .page-item .page-link {
-    background: var(--bg-card);
-    border-color: var(--border);
-    color: var(--text-secondary);
-}
-
-[data-theme="dark"] .pagination-nexus .page-item .page-link:hover {
-    background: var(--bg-body);
-}
-
-[data-theme="dark"] .empty-state {
-    background: var(--bg-card);
-}
-
-[data-theme="dark"] .table-nexus thead {
-    background: var(--bg-app);
-}
-
-/* --------------------------------------------------------------------------
-   5. TOAST NOTIFICATIONS (Auditoría: clases en lugar de estilos inline)
+   4. TOAST NOTIFICATIONS (Auditoría: clases en lugar de estilos inline)
    -------------------------------------------------------------------------- */
 
 #nexus-toast {
@@ -207,8 +185,4 @@
 
 #nexus-toast.toast-default {
     background-color: #1E293B;
-}
-
-[data-theme="dark"] #nexus-toast.toast-default {
-    background-color: #334155;
 }

@@ -2,7 +2,7 @@
 
 {% block title %}Repositorio de Fuentes Académicas | NexusCiencia{% endblock %}
 
-{% block description %}Accede a {{ total_fuentes }}+ papers científicos originales de PubMed, Scopus, ScienceDirect y
+{% block description %}Accede a {{ total_fuentes }}+ papers académicos originales de PubMed, Scopus, ScienceDirect y
 APA. Fuentes primarias verificadas para investigadores y profesionales de la psicología.{% endblock %}
 
 {% block styles %}
@@ -80,7 +80,8 @@ APA. Fuentes primarias verificadas para investigadores y profesionales de la psi
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen font-sans">
+<div class="min-h-screen font-sans" {% if acceso_bloqueado
+    %}style="filter:blur(6px);pointer-events:none;user-select:none;" {% endif %}>
 
     <!-- ===== HERO SECTION - COMPACT ===== -->
     <section class="hero-mesh px-4 pt-16 pb-12 sm:px-6 lg:px-8">
@@ -102,7 +103,7 @@ APA. Fuentes primarias verificadas para investigadores y profesionales de la psi
                 Repositorio de Fuentes
             </h1>
             <p class="mt-4 max-w-2xl text-lg text-slate-600 leading-relaxed">
-                Papers académicos originales de las principales bases de datos científicas.
+                Papers académicos originales de las principales bases de datos académicas.
                 Fuentes primarias <span class="font-medium text-slate-800">peer-reviewed</span> para tu investigación.
             </p>
 
@@ -188,22 +189,22 @@ APA. Fuentes primarias verificadas para investigadores y profesionales de la psi
                     <!-- Source Badge -->
                     <div class="sm:col-span-2 flex sm:justify-center">
                         <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium
-                            {% if fuente.fuente == 'PubMed' %}badge-pubmed
-                            {% elif fuente.fuente == 'Scopus' %}badge-scopus
-                            {% elif fuente.fuente == 'ScienceDirect' %}badge-sciencedirect
+                            {% if fuente.fuente_origen == 'PubMed' %}badge-pubmed
+                            {% elif fuente.fuente_origen == 'Scopus' %}badge-scopus
+                            {% elif fuente.fuente_origen == 'ScienceDirect' %}badge-sciencedirect
                             {% else %}badge-apa{% endif %}">
-                            {{ fuente.fuente }}
+                            {{ fuente.fuente_origen }}
                         </span>
                     </div>
 
                     <!-- Year -->
                     <div class="sm:col-span-2 text-sm font-medium text-slate-600 sm:text-center">
-                        <span class="sm:hidden text-slate-400">Año: </span>{{ fuente.año }}
+                        <span class="sm:hidden text-slate-400">Año: </span>{{ fuente.anio }}
                     </div>
 
                     <!-- Action Button -->
                     <div class="sm:col-span-2 flex sm:justify-end">
-                        <a href="{{ fuente.url }}"
+                        <a href="{{ fuente.url_descarga or '#' }}"
                             class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 hover:border-primary-300 hover:text-primary-700">
                             {% if fuente.tipo == 'PDF' %}
                             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -229,17 +230,24 @@ APA. Fuentes primarias verificadas para investigadores y profesionales de la psi
                 {% endfor %}
             </div>
 
-            <!-- Load More -->
-            <div class="mt-8 text-center">
-                <button
-                    class="inline-flex items-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-8 py-4 text-sm font-bold text-slate-700 shadow-sm transition hover:border-primary-300 hover:bg-primary-50 hover:text-primary-700">
-                    Cargar más fuentes
-                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </button>
+            <!-- Pagination -->
+            {% if fuentes_pag and fuentes_pag.pages > 1 %}
+            <div class="mt-8 flex justify-center items-center gap-2">
+                {% if fuentes_pag.has_prev %}
+                <a href="{{ url_for('main.repositorio_fuentes', page=fuentes_pag.prev_num) }}"
+                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-primary-50 hover:text-primary-700">
+                    ← Anterior
+                </a>
+                {% endif %}
+                <span class="text-sm text-slate-500">Página {{ fuentes_pag.page }} de {{ fuentes_pag.pages }}</span>
+                {% if fuentes_pag.has_next %}
+                <a href="{{ url_for('main.repositorio_fuentes', page=fuentes_pag.next_num) }}"
+                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-primary-50 hover:text-primary-700">
+                    Siguiente →
+                </a>
+                {% endif %}
             </div>
+            {% endif %}
 
         </div>
     </section>
@@ -263,4 +271,48 @@ APA. Fuentes primarias verificadas para investigadores y profesionales de la psi
     </section>
 
 </div>
+
+{% if acceso_bloqueado %}
+<!-- Modal: Fuentes requiere iniciar sesión -->
+<div
+    style="position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,0.55);backdrop-filter:blur(4px);">
+    <div
+        style="background:var(--bg-card, #fff);border-radius:var(--radius, 12px);max-width:440px;width:90%;box-shadow:var(--shadow-soft, 0 4px 20px rgba(0,0,0,0.05));overflow:hidden;">
+        <!-- Header -->
+        <div style="background:var(--bg-app, #0F172A);padding:28px 30px;text-align:center;">
+            <div
+                style="width:56px;height:56px;border-radius:50%;background:var(--accent, #3B82F6);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+            </div>
+            <h3 style="font-family:'Inter',sans-serif;font-weight:800;font-size:1.25rem;color:#fff;margin:0;">Inicia
+                Sesión para Acceder</h3>
+        </div>
+        <!-- Body -->
+        <div style="padding:28px 30px;text-align:center;">
+            <p style="color:var(--text-secondary, #64748B);font-size:0.95rem;line-height:1.65;margin-bottom:24px;">
+                Para acceder a las <strong style="color:var(--text-primary, #1E293B);">Fuentes Académicas</strong>,
+                debes iniciar sesión
+                con cualquier tipo de correo electrónico (personal, .edu o @ieproes.edu.sv).
+            </p>
+            <a href="{{ url_for('auth.login') }}"
+                style="display:block;padding:12px 24px;background:var(--accent, #3B82F6);color:#fff;border-radius:var(--radius, 12px);font-weight:700;font-size:0.95rem;text-decoration:none;transition:opacity 0.2s;">
+                Continuar con Google
+            </a>
+        </div>
+        <!-- Footer -->
+        <div
+            style="background:var(--bg-body, #f8fafc);border-top:1px solid var(--border, #E2E8F0);padding:14px;text-align:center;">
+            <a href="{{ url_for('main.inicio') }}"
+                style="color:var(--text-secondary, #64748B);font-size:0.875rem;text-decoration:none;">
+                Volver al Inicio
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

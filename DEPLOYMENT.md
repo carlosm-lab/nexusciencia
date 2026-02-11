@@ -122,7 +122,7 @@ sudo nano /etc/systemd/system/nexusciencia.service
 **Contenido**:
 ```ini
 [Unit]
-Description=NexusCiencia - Plataforma de Artículos Científicos
+Description=NexusCiencia - Plataforma de Artículos Educativos
 After=network.target mysql.service
 
 [Service]

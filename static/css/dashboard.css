@@ -965,26 +965,3 @@
     font-size: 0.9rem;
     white-space: nowrap;
 }
-
-/* Dark mode support */
-[data-theme="dark"] .publications-thead {
-    background: #1E293B;
-    border-bottom-color: #334155;
-}
-
-[data-theme="dark"] .publications-th {
-    color: #94A3B8;
-}
-
-[data-theme="dark"] .article-title {
-    color: #F1F5F9;
-}
-
-[data-theme="dark"] .article-category-badge {
-    background: #1E3A5F;
-    color: #60A5FA;
-}
-
-[data-theme="dark"] .article-date-cell {
-    color: #94A3B8;
-}

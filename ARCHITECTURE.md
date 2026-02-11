@@ -2,7 +2,7 @@
 
 ## System Overview
 
-NexusCiencia is a scientific article repository built with Flask, following a modular architecture with factory pattern, blueprints, and separation of concerns.
+NexusCiencia is an educational article repository built with Flask, following a modular architecture with factory pattern, blueprints, and separation of concerns.
 
 ## High-Level Architecture
 

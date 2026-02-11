@@ -368,41 +368,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ========================================
-// DARK MODE TOGGLE
-// ========================================
-const themeToggle = document.getElementById('theme-toggle');
-const currentTheme = localStorage.getItem('theme') || 'light';
-document.documentElement.setAttribute('data-theme', currentTheme);
-
-// Update toggle state and icon highlighting
-function updateThemeState(theme) {
-    const sunIcon = document.querySelector('.theme-icon-sun');
-    const moonIcon = document.querySelector('.theme-icon-moon');
-    const toggle = document.getElementById('theme-toggle');
-
-    if (theme === 'dark') {
-        if (sunIcon) sunIcon.style.opacity = '0.4';
-        if (moonIcon) moonIcon.style.opacity = '1';
-        if (toggle && toggle.type === 'checkbox') toggle.checked = true;
-    } else {
-        if (sunIcon) sunIcon.style.opacity = '1';
-        if (moonIcon) moonIcon.style.opacity = '0.4';
-        if (toggle && toggle.type === 'checkbox') toggle.checked = false;
-    }
-}
-
-updateThemeState(currentTheme);
-
-if (themeToggle) {
-    themeToggle.addEventListener('change', () => {
-        const newTheme = themeToggle.checked ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeState(newTheme);
-    });
-}
-
-// ========================================
 // KEYBOARD SHORTCUTS
 // ========================================
 document.addEventListener('keydown', (e) => {

@@ -90,7 +90,14 @@ def configure_logging(app):
     )
     file_handler.setLevel(log_level)
     
-    stream_handler = logging.StreamHandler()
+    # REMEDIACIÓN AUD-006: Forzar UTF-8 en consola para evitar UnicodeEncodeError
+    # con emojis en Windows (cp1252)
+    import sys
+    try:
+        utf8_stream = open(sys.stdout.fileno(), mode='w', encoding='utf-8', errors='replace', closefd=False)
+        stream_handler = logging.StreamHandler(stream=utf8_stream)
+    except (OSError, ValueError):
+        stream_handler = logging.StreamHandler()
     stream_handler.setLevel(log_level)
     
     # Use JSON formatter in production for log analytics
@@ -168,7 +175,7 @@ def register_extensions(app):
         "swagger": "2.0",
         "info": {
             "title": "NexusCiencia API",
-            "description": "API REST para gestión de artículos científicos",
+            "description": "API REST para gestión de artículos educativos",
             "version": "3.0.0",
             "contact": {"name": "NexusCiencia Team", "email": "api@nexusciencia.com"},
             "license": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"}
@@ -195,7 +202,6 @@ def configure_assets(app):
         'css/variables.css',
         'css/layout.css',
         'css/components.css',
-        'css/dark-mode.css',
         'css/generic.css',
         filters='cssmin',
         output='gen/packed.css'
@@ -318,10 +324,20 @@ def register_context_processors(app):
         from app.models.categoria import Categoria
         todas_las_categorias = Categoria.get_nombres_con_fallback()
         
+        # Verificar acceso educativo (.edu)
+        tiene_acceso_edu = False
+        if es_admin:
+            tiene_acceso_edu = True  # Admin siempre tiene acceso
+        elif 'user_email' in session:
+            from app.models.usuario import Usuario
+            user = Usuario.query.filter_by(email=session['user_email']).first()
+            tiene_acceso_edu = user.acceso_edu if user else False
+        
         return dict(
             todas_las_categorias=todas_las_categorias,
             es_admin=es_admin,
-            get_category_slug=get_category_slug  # Nueva función para URLs jerárquicas
+            get_category_slug=get_category_slug,  # Nueva función para URLs jerárquicas
+            tiene_acceso_edu=tiene_acceso_edu  # Acceso educativo verificado
         )
 
 
@@ -370,7 +386,7 @@ def register_request_hooks(app):
 
 def configure_production_features(app):
     """Configura características específicas de producción"""
-    if app.debug:
+    if app.debug or app.testing:
         return
     
     # HTTPS redirect con Flask-Talisman
@@ -422,7 +438,7 @@ def configure_production_features(app):
         strict_transport_security_include_subdomains=True,
         strict_transport_security_preload=True,
         content_security_policy=get_csp_policy,
-        content_security_policy_nonce=True,
+        content_security_policy_nonce_in=['script-src', 'style-src'],
         content_security_policy_report_only=False,
         # Headers adicionales de seguridad
         x_content_type_options=True,  # Previene MIME sniffing

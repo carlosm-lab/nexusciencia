@@ -2,7 +2,7 @@
 
 {% block title %}{{ articulo.titulo}} | Nexus Ciencia{% endblock %}
 {% block description %}{% if articulo.descripcion %}{{ articulo.descripcion }}{% else %}{{ articulo.titulo }}. Artículo
-científico de {{ articulo.categoria }} en NexusCiencia. Tiempo de lectura: {{ tiempo_lectura }} minutos.{% endif %}{%
+educativo de {{ articulo.categoria }} en NexusCiencia. Tiempo de lectura: {{ tiempo_lectura }} minutos.{% endif %}{%
 endblock %}
 {% block og_type %}article{% endblock %}
 {% block og_title %}{{ articulo.titulo }}{% endblock %}
@@ -51,15 +51,23 @@ endblock %}
                     </svg>
                     <span>Escuchar Podcast</span>
                 </div>
+                {% if session.get('user_email') %}
                 <audio controls class="native-audio" style="width: 100%; margin-top: 10px;">
                     <source src="{{ articulo.url_audio }}" type="audio/mpeg">
                     Tu navegador no soporta el elemento de audio.
                 </audio>
+                {% else %}
+                <button class="btn-save" onclick="document.getElementById('loginModal').style.display='flex';"
+                    style="width:100%;margin-top:10px;cursor:pointer;">
+                    🔒 Inicia sesión para escuchar
+                </button>
+                {% endif %}
             </div>
             {% endif %}
 
             <div class="action-bar">
 
+                {% if session.get('user_email') %}
                 <a href="{{ articulo.url_pdf if articulo.url_pdf else 'javascript:void(0);' }}" target="_blank"
                     class="btn-save btn-pdf" data-available="{{ 'true' if articulo.url_pdf else 'false' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -70,6 +78,18 @@ endblock %}
                     </svg>
                     Descargar PDF
                 </a>
+                {% else %}
+                <button class="btn-save btn-pdf" data-available="true"
+                    onclick="document.getElementById('loginModal').style.display='flex';">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    🔒 Descargar PDF
+                </button>
+                {% endif %}
 
                 {% if session.get('user_email') %}
                 <button id="btn-save-action" class="btn-save {% if esta_guardado %}saved{% endif %}"
@@ -90,12 +110,13 @@ endblock %}
                     {% endif %}
                 </button>
                 {% else %}
-                <button class="btn-save" data-bs-toggle="modal" data-bs-target="#loginModal" data-available="true">
+                <button class="btn-save" data-available="true"
+                    onclick="document.getElementById('loginModal').style.display='flex';">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                     </svg>
-                    Guardar Artículo
+                    🔒 Guardar Artículo
                 </button>
                 {% endif %}
             </div>
@@ -124,32 +145,42 @@ endblock %}
     </div>
 </div>
 
-<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-content-custom">
-            <div class="modal-header-custom">
-                <div class="modal-icon-circle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                </div>
-                <h3 style="font-weight: 800; margin: 0;">¡Guarda este artículo!</h3>
+<!-- Modal de inicio de sesión para acciones restringidas -->
+<div id="loginModal"
+    style="display:none;position:fixed;inset:0;z-index:999;align-items:center;justify-content:center;background:rgba(15,23,42,0.55);backdrop-filter:blur(4px);">
+    <div
+        style="background:var(--bg-card, #fff);border-radius:var(--radius, 12px);max-width:440px;width:90%;box-shadow:var(--shadow-soft, 0 4px 20px rgba(0,0,0,0.05));overflow:hidden;">
+        <!-- Header -->
+        <div style="background:var(--bg-app, #0F172A);padding:28px 30px;text-align:center;">
+            <div
+                style="width:56px;height:56px;border-radius:50%;background:var(--accent, #3B82F6);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
             </div>
-            <div class="modal-body" style="padding: 30px; text-align: center;">
-                <p style="color: #6B7280; font-size: 1rem; margin-bottom: 25px;">
-                    Inicia sesión con tu cuenta de Google para crear tu propia biblioteca de investigación.
-                </p>
-                <a href="/login" class="btn-google-modal">Continuar con Google</a>
-            </div>
-            <div class="modal-footer"
-                style="background: #F9FAFB; border-top: 1px solid #E5E7EB; justify-content: center; padding: 15px;">
-                <button type="button" class="btn btn-link" data-bs-dismiss="modal"
-                    style="color: #6B7280; text-decoration: none; font-size: 0.9rem;">
-                    No gracias, solo quiero leer
-                </button>
-            </div>
+            <h3 style="font-family:'Inter',sans-serif;font-weight:800;font-size:1.25rem;color:#fff;margin:0;">Inicia
+                Sesión</h3>
+        </div>
+        <!-- Body -->
+        <div style="padding:28px 30px;text-align:center;">
+            <p style="color:var(--text-secondary, #64748B);font-size:0.95rem;line-height:1.65;margin-bottom:24px;">
+                Para guardar artículos, descargar PDFs y escuchar podcasts, inicia sesión con tu cuenta de Google.
+            </p>
+            <a href="/login"
+                style="display:block;padding:12px 24px;background:var(--accent, #3B82F6);color:#fff;border-radius:var(--radius, 12px);font-weight:700;font-size:0.95rem;text-decoration:none;transition:opacity 0.2s;">
+                Continuar con Google
+            </a>
+        </div>
+        <!-- Footer -->
+        <div
+            style="background:var(--bg-body, #f8fafc);border-top:1px solid var(--border, #E2E8F0);padding:14px;text-align:center;">
+            <button type="button" onclick="document.getElementById('loginModal').style.display='none';"
+                style="background:none;border:none;color:var(--text-secondary, #64748B);font-size:0.875rem;cursor:pointer;">
+                No gracias, solo quiero leer
+            </button>
         </div>
     </div>
 </div>

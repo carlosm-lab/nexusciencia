@@ -15,7 +15,7 @@ CARPETA_TEMPLATES = os.path.join(os.getcwd(), 'templates', 'articulos')
 
 # Contenido HTML base
 CONTENIDO_HTML_BASE = """
-<h2><span>Evidencia Científica y Análisis Clínico</span></h2>
+<h2><span>Evidencia Académica y Análisis Clínico</span></h2>
 <h3><span>1. Introducción al Estudio</span></h3>
 <p><span>Este artículo presenta una revisión exhaustiva sobre los impactos fisiológicos y metabólicos observados en estudios recientes. La metodología aplicada prioriza ensayos controlados aleatorizados para garantizar la validez de los datos presentados en el contexto de <strong>{{CATEGORIA}}</strong>.</span></p>
 <p><span>Se examinan mecanismos moleculares clave, incluyendo la interacción con receptores específicos y la modulación de vías de señalización intracelular que afectan directamente al comportamiento y la salud humana.</span></p>

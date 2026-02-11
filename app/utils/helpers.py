@@ -85,7 +85,7 @@ def check_session_timeout():
         if now - last_activity > SESSION_INACTIVITY_TIMEOUT:
             import logging
             logger = logging.getLogger(__name__)
-            logger.info(f"Sesión expirada por inactividad: {session.get('user_email')}")
+            logger.info(f"Sesión expirada por inactividad: {hash_email(session.get('user_email', ''))}")
             session.clear()
             return
     

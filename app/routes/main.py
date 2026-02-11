@@ -4,7 +4,7 @@ Blueprint de rutas principales: inicio, artículos, páginas estáticas
 
 import os
 import logging
-from flask import Blueprint, render_template, request, session, abort, Response
+from flask import Blueprint, render_template, request, session, abort, Response, redirect, url_for, current_app
 from bs4 import BeautifulSoup
 from sqlalchemy.orm import selectinload
 from sqlalchemy.exc import SQLAlchemyError
@@ -43,7 +43,7 @@ def inicio() -> str:
             "nombre": "Estrés y Ansiedad",
             "emoji": "🧠",
             "slug": "psi-del-estres-y-la-ansiedad",
-            "descripcion": "Investigación sobre trastornos de ansiedad, estrés crónico, y estrategias de afrontamiento basadas en evidencia científica."
+            "descripcion": "Investigación sobre trastornos de ansiedad, estrés crónico, y estrategias de afrontamiento basadas en evidencia académica."
         },
         {
             "nombre": "Neurociencia Conductual",
@@ -357,8 +357,53 @@ def ver_tag(slug: str) -> str:
 
 
 # =============================================================================
-# RUTAS DE SECCIONES ACADÉMICAS ESPECIALIZADAS
+# SISTEMA DE ACCESO ACADÉMICO (4 NIVELES)
 # =============================================================================
+# Tipo 1: Sin sesión → Acceso general, bloqueado en fuentes/casos/recursos
+# Tipo 2: Correo personal → Acceso a fuentes, bloqueado en casos/recursos  
+# Tipo 3: Correo .edu → Acceso a fuentes+casos, bloqueado en recursos
+# Tipo 4: Correo @ieproes.edu.sv (o admin) → Acceso total
+# =============================================================================
+
+def _determinar_tipo_usuario() -> int:
+    """
+    Determina el nivel de acceso del usuario actual.
+    
+    Retorna:
+        1 = Sin sesión (visitante)
+        2 = Sesión con correo personal
+        3 = Sesión con correo .edu
+        4 = Sesión con correo @ieproes.edu.sv o admin
+    """
+    if 'user_email' not in session:
+        return 1
+    
+    email = session.get('user_email', '').strip().lower()
+    
+    # Admin siempre es tipo 4
+    admin_email = current_app.config.get('ADMIN_EMAIL', '')
+    if admin_email and email == admin_email.strip().lower():
+        return 4
+    
+    # Correo @ieproes.edu.sv → tipo 4
+    if email.endswith('@ieproes.edu.sv'):
+        return 4
+    
+    # Correo .edu → tipo 3 (verificar acceso_edu en BD también)
+    from app.models.usuario import Usuario as _User
+    usuario = _User.query.filter_by(email=email).first()
+    
+    if usuario and usuario.acceso_edu:
+        return 3
+    
+    # Verificar dominio .edu directamente
+    from app.utils.decorators import es_email_educativo
+    if es_email_educativo(email):
+        return 3
+    
+    # Correo personal → tipo 2
+    return 2
+
 
 @main_bp.route('/fuentes')
 @limiter.limit("30 per minute", key_func=get_rate_limit_key)
@@ -366,98 +411,27 @@ def repositorio_fuentes() -> str:
     """
     Repositorio de Fuentes Académicas.
     
-    Papers crudos de Scopus, PubMed, ScienceDirect, etc.
-    Diseño de lista compacta estilo bibliotecario.
+    Acceso: Tipos 2, 3 y 4 (requiere iniciar sesión con cualquier correo).
+    Tipo 1 (sin sesión) → contenido difuminado + modal.
     """
-    # Datos dummy para desarrollo (reemplazar con modelo de BD)
-    fuentes = [
-        {
-            "id": 1,
-            "titulo": "Neurobiological Mechanisms of Stress-Related Disorders",
-            "autor": "Chen, L., & Williams, R.",
-            "año": 2023,
-            "fuente": "PubMed",
-            "tipo": "PDF",
-            "doi": "10.1016/j.neuroscience.2023.05.012",
-            "url": "#"
-        },
-        {
-            "id": 2,
-            "titulo": "Cognitive Behavioral Therapy for Anxiety: A Meta-Analysis",
-            "autor": "Johnson, M., et al.",
-            "año": 2024,
-            "fuente": "Scopus",
-            "tipo": "PDF",
-            "doi": "10.1037/ccp0000821",
-            "url": "#"
-        },
-        {
-            "id": 3,
-            "titulo": "The Role of Dopamine in Reward Processing",
-            "autor": "García-Pérez, A.",
-            "año": 2023,
-            "fuente": "ScienceDirect",
-            "tipo": "DOI",
-            "doi": "10.1016/j.biopsych.2023.11.004",
-            "url": "#"
-        },
-        {
-            "id": 4,
-            "titulo": "Attachment Styles and Adult Romantic Relationships",
-            "autor": "Thompson, K., & Lee, S.",
-            "año": 2022,
-            "fuente": "APA PsycNet",
-            "tipo": "PDF",
-            "doi": "10.1037/pspi0000412",
-            "url": "#"
-        },
-        {
-            "id": 5,
-            "titulo": "Neural Correlates of Mindfulness Meditation",
-            "autor": "Patel, R., et al.",
-            "año": 2024,
-            "fuente": "PubMed",
-            "tipo": "PDF",
-            "doi": "10.1093/cercor/bhad298",
-            "url": "#"
-        },
-        {
-            "id": 6,
-            "titulo": "Prevalence of Depression in Adolescents: Global Estimates",
-            "autor": "WHO Mental Health Group",
-            "año": 2023,
-            "fuente": "Scopus",
-            "tipo": "PDF",
-            "doi": "10.1016/S2215-0366(23)00193-1",
-            "url": "#"
-        },
-        {
-            "id": 7,
-            "titulo": "Trauma-Informed Care in Clinical Practice",
-            "autor": "Martinez, J., & Brown, T.",
-            "año": 2024,
-            "fuente": "ScienceDirect",
-            "tipo": "DOI",
-            "doi": "10.1016/j.cpr.2024.102345",
-            "url": "#"
-        },
-        {
-            "id": 8,
-            "titulo": "Executive Function Development in Early Childhood",
-            "autor": "Anderson, P.",
-            "año": 2023,
-            "fuente": "APA PsycNet",
-            "tipo": "PDF",
-            "doi": "10.1037/dev0001543",
-            "url": "#"
-        },
-    ]
+    from app.models.fuente import FuenteAcademica
     
-    total_fuentes = len(fuentes)
+    tipo_usuario = _determinar_tipo_usuario()
+    acceso_bloqueado = tipo_usuario < 2  # Solo tipo 1 bloqueado
+    
+    pagina = request.args.get('page', 1, type=int)
+    per_page = 12
+    
+    fuentes_pag = FuenteAcademica.get_active().order_by(
+        FuenteAcademica.fecha.desc()
+    ).paginate(page=pagina, per_page=per_page, error_out=False)
     
     return render_template('fuentes.html',
-                           fuentes=fuentes,
-                           total_fuentes=total_fuentes)
+                           fuentes=fuentes_pag.items,
+                           fuentes_pag=fuentes_pag,
+                           total_fuentes=fuentes_pag.total,
+                           acceso_bloqueado=acceso_bloqueado,
+                           tipo_usuario=tipo_usuario)
 
 
 @main_bp.route('/casos-clinicos')
@@ -466,112 +440,68 @@ def casos_clinicos() -> str:
     """
     Estudios de Caso Clínicos.
     
-    Casos prácticos para estudiantes de psicología.
-    Diseño de expediente médico/historia clínica.
+    Acceso: Tipos 3 y 4 (requiere correo .edu o @ieproes.edu.sv).
+    Tipos 1 y 2 → contenido difuminado + modal contextual.
     """
-    # Datos dummy para desarrollo (reemplazar con modelo de BD)
-    casos = [
-        {
-            "id": 1,
-            "numero": "01",
-            "titulo": "Trastorno de Pánico con Agorafobia",
-            "nivel": "Intermedio",
-            "nivel_color": "amber",
-            "sintomatologia": [
-                "Ataques de pánico recurrentes",
-                "Evitación de espacios abiertos",
-                "Anticipación ansiosa constante",
-                "Síntomas somáticos (palpitaciones, sudoración)"
-            ],
-            "edad_paciente": "28 años",
-            "sexo": "Femenino",
-            "slug": "caso-01-panico-agorafobia"
-        },
-        {
-            "id": 2,
-            "numero": "02",
-            "titulo": "Depresión Mayor con Ideación Suicida",
-            "nivel": "Avanzado",
-            "nivel_color": "rose",
-            "sintomatologia": [
-                "Anhedonia severa",
-                "Insomnio terminal",
-                "Pensamientos de muerte recurrentes",
-                "Aislamiento social progresivo"
-            ],
-            "edad_paciente": "45 años",
-            "sexo": "Masculino",
-            "slug": "caso-02-depresion-ideacion"
-        },
-        {
-            "id": 3,
-            "numero": "03",
-            "titulo": "TDAH en Adulto no Diagnosticado",
-            "nivel": "Principiante",
-            "nivel_color": "emerald",
-            "sintomatologia": [
-                "Dificultad de concentración laboral",
-                "Impulsividad en decisiones",
-                "Historial de bajo rendimiento académico",
-                "Problemas de organización"
-            ],
-            "edad_paciente": "32 años",
-            "sexo": "Masculino",
-            "slug": "caso-03-tdah-adulto"
-        },
-        {
-            "id": 4,
-            "numero": "04",
-            "titulo": "Trastorno de Estrés Postraumático",
-            "nivel": "Avanzado",
-            "nivel_color": "rose",
-            "sintomatologia": [
-                "Flashbacks intrusivos",
-                "Hipervigilancia constante",
-                "Evitación de estímulos relacionados",
-                "Alteraciones del sueño (pesadillas)"
-            ],
-            "edad_paciente": "35 años",
-            "sexo": "Femenino",
-            "slug": "caso-04-tept"
-        },
-        {
-            "id": 5,
-            "numero": "05",
-            "titulo": "Trastorno Obsesivo-Compulsivo",
-            "nivel": "Intermedio",
-            "nivel_color": "amber",
-            "sintomatologia": [
-                "Obsesiones de contaminación",
-                "Rituales de lavado compulsivo",
-                "Pensamientos egodistónicos",
-                "Interferencia funcional significativa"
-            ],
-            "edad_paciente": "24 años",
-            "sexo": "Femenino",
-            "slug": "caso-05-toc"
-        },
-        {
-            "id": 6,
-            "numero": "06",
-            "titulo": "Fobia Social Generalizada",
-            "nivel": "Principiante",
-            "nivel_color": "emerald",
-            "sintomatologia": [
-                "Miedo a evaluación negativa",
-                "Evitación de situaciones sociales",
-                "Ruborización y temblor",
-                "Anticipación ansiosa"
-            ],
-            "edad_paciente": "19 años",
-            "sexo": "Masculino",
-            "slug": "caso-06-fobia-social"
-        },
-    ]
+    from app.models.caso import CasoClinico
     
-    total_casos = len(casos)
+    tipo_usuario = _determinar_tipo_usuario()
+    acceso_bloqueado = tipo_usuario < 3  # Tipos 1 y 2 bloqueados
+    
+    pagina = request.args.get('page', 1, type=int)
+    per_page = 12
+    
+    casos_pag = CasoClinico.get_active().order_by(
+        CasoClinico.fecha.desc()
+    ).paginate(page=pagina, per_page=per_page, error_out=False)
     
     return render_template('casos.html',
-                           casos=casos,
-                           total_casos=total_casos)
+                           casos=casos_pag.items,
+                           casos_pag=casos_pag,
+                           total_casos=casos_pag.total,
+                           acceso_bloqueado=acceso_bloqueado,
+                           tipo_usuario=tipo_usuario)
+
+
+@main_bp.route('/casos-clinicos/<slug>')
+@limiter.limit("30 per minute", key_func=get_rate_limit_key)
+def ver_caso(slug: str) -> str:
+    """
+    Vista de lectura de un caso clínico individual.
+    
+    Acceso: Tipos 3 y 4 (requiere correo .edu o @ieproes.edu.sv).
+    Tipos 1 y 2 → contenido difuminado + modal contextual.
+    """
+    from app.models.caso import CasoClinico
+    
+    tipo_usuario = _determinar_tipo_usuario()
+    acceso_bloqueado = tipo_usuario < 3  # Tipos 1 y 2 bloqueados
+    
+    caso = CasoClinico.get_active().filter_by(slug=slug).first_or_404()
+    
+    # Cargar contenido HTML solo si tiene acceso
+    contenido_html = ""
+    if not acceso_bloqueado:
+        ruta_html = os.path.join(carpeta_base, 'templates', 'casos_clinicos', caso.nombre_archivo)
+        
+        if os.path.exists(ruta_html):
+            with open(ruta_html, 'r', encoding='utf-8') as f:
+                contenido_html = f.read()
+        else:
+            contenido_html = "<p><em>Error: El archivo de contenido no se encuentra en el servidor.</em></p>"
+        
+        # Registrar visita solo si tiene acceso
+        try:
+            nuevo_log = LogActividad(tipo_evento=LogEventType.LECTURA, detalle=f"Caso leído: {slug}")
+            db.session.add(nuevo_log)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            logger.error(f"Error de BD en analytics caso: {e.__class__.__name__}")
+            db.session.rollback()
+    
+    return render_template('caso_detalle.html',
+                           caso=caso,
+                           contenido_html=contenido_html,
+                           acceso_bloqueado=acceso_bloqueado,
+                           tipo_usuario=tipo_usuario)
 

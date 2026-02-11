@@ -38,7 +38,7 @@ def validar_slug(slug: Optional[str]) -> bool:
     # Solo permitir letras minúsculas, números y guiones
     # NO permitir: espacios, puntos, barras, caracteres especiales
     pattern = r'^[a-z0-9]+(-[a-z0-9]+)*$'
-    return bool(re.match(pattern, slug.lower()))
+    return bool(re.match(pattern, slug))
 
 
 def validar_url_segura(url: Optional[str]) -> bool:

@@ -222,13 +222,3 @@
 .contact-link:hover {
     text-decoration: underline;
 }
-
-/* Dark Mode Adjustments */
-[data-theme="dark"] .error-suggestions {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] .error-contact {
-    border-color: rgba(255, 255, 255, 0.1);
-}

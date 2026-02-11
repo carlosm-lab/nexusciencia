@@ -110,17 +110,3 @@ a {
     background: #94A3B8;
     /* Slate 400 al hover */
 }
-
-/* SCROLLBAR LIGHT MODE */
-[data-theme="light"] ::-webkit-scrollbar-track {
-    background: #F1F5F9;
-}
-
-[data-theme="light"] ::-webkit-scrollbar-thumb {
-    background: #94A3B8;
-    border: 2px solid #F1F5F9;
-}
-
-[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
-    background: #64748B;
-}

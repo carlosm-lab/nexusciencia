@@ -96,10 +96,13 @@ def vaciar_biblioteca() -> Tuple[Response, int]:
         return jsonify({'status': 'error', 'message': 'Usuario no encontrado'}), 404
     
     # Limpiar la lista de artículos guardados (Disociación)
-    usuario.articulos_guardados = []
-    
-    db.session.commit()
-    return jsonify({'status': 'ok', 'message': 'Biblioteca vaciada'})
+    try:
+        usuario.articulos_guardados = []
+        db.session.commit()
+        return jsonify({'status': 'ok', 'message': 'Biblioteca vaciada'})
+    except Exception:
+        db.session.rollback()
+        return jsonify({'status': 'error', 'message': 'Error al vaciar biblioteca'}), 500
 
 
 @api_bp.route('/health')

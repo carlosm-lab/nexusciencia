@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 
     <!-- SEO Meta Tags -->
-    <title>{% block title %}Nexus Ciencia | Repositorio Científico de Psicología{% endblock %}</title>
+    <title>{% block title %}Nexus Ciencia | Repositorio Educativo de Psicología{% endblock %}</title>
     <meta name="description"
-        content="{% block description %}Repositorio científico de artículos de psicología. Explora contenido académico de calidad sobre psicología clínica, neurociencia, comportamiento y salud mental.{% endblock %}">
+        content="{% block description %}Repositorio educativo de artículos de psicología. Explora contenido académico de calidad sobre psicología clínica, neurociencia, comportamiento y salud mental.{% endblock %}">
     <meta name="keywords"
-        content="psicología, neurociencia, artículos científicos, investigación, salud mental, comportamiento humano">
+        content="psicología, neurociencia, artículos educativos, investigación, salud mental, comportamiento humano">
     <meta name="author" content="Nexus Ciencia">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
-    <meta property="og:title" content="{% block og_title %}Nexus Ciencia | Repositorio Científico{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Nexus Ciencia | Repositorio Educativo{% endblock %}">
     <meta property="og:description"
-        content="{% block og_description %}Repositorio de artículos científicos de psicología{% endblock %}">
+        content="{% block og_description %}Repositorio de artículos educativos de psicología{% endblock %}">
     <meta property="og:site_name" content="Nexus Ciencia">
     <meta property="og:locale" content="es_ES">
     <meta property="og:image"
@@ -27,14 +27,14 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt"
-        content="{% block og_image_alt %}Nexus Ciencia - Repositorio Científico de Psicología{% endblock %}">
+        content="{% block og_image_alt %}Nexus Ciencia - Repositorio Educativo de Psicología{% endblock %}">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title"
-        content="{% block twitter_title %}Nexus Ciencia | Repositorio Científico de Psicología{% endblock %}">
+        content="{% block twitter_title %}Nexus Ciencia | Repositorio Educativo de Psicología{% endblock %}">
     <meta name="twitter:description"
-        content="{% block twitter_description %}Artículos científicos de psicología de calidad académica{% endblock %}">
+        content="{% block twitter_description %}Artículos educativos de psicología de calidad académica{% endblock %}">
     <meta name="twitter:image"
         content="{% block twitter_image %}{{ url_for('static', filename='img/og-default.png', _external=True) }}{% endblock %}">
 
@@ -67,7 +67,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-    <!-- Flask-Assets CSS Bundle (incluye variables, layout, components, dark-mode) -->
+    <!-- Flask-Assets CSS Bundle (incluye variables, layout, components) -->
     {% assets "css_all" %}
     <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
@@ -173,7 +173,7 @@
                     <line x1="16" y1="13" x2="8" y2="13"></line>
                     <line x1="16" y1="17" x2="8" y2="17"></line>
                 </svg>
-                <span class="link-text">Fuentes Académicas</span>
+                <span class="link-text">Fuentes Académicas{% if not tiene_acceso_edu %} 🔒{% endif %}</span>
             </a>
 
             <a href="{{ url_for('main.casos_clinicos') }}"
@@ -183,7 +183,7 @@
                     <path
                         d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span class="link-text">Casos Clínicos</span>
+                <span class="link-text">Casos Clínicos{% if not tiene_acceso_edu %} 🔒{% endif %}</span>
             </a>
 
             {% if session.get('user_email') and not es_admin %}

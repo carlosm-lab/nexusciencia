@@ -4,7 +4,7 @@ Auditoría 1.2: Generación dinámica de sitemap.xml
 """
 
 from flask import Blueprint, Response, url_for, current_app
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.models.articulo import Articulo
 from app.constants import LISTA_CATEGORIAS, get_category_slug
@@ -46,7 +46,7 @@ def sitemap():
     for page in static_pages:
         urls.append({
             'loc': base_url.rstrip('/') + page['loc'],
-            'lastmod': datetime.now().strftime('%Y-%m-%d'),
+            'lastmod': datetime.now(timezone.utc).strftime('%Y-%m-%d'),
             'changefreq': page['changefreq'],
             'priority': page['priority']
         })

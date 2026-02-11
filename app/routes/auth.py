@@ -12,6 +12,7 @@ from app.models.usuario import Usuario
 from app.models.notificacion import Notificacion
 from app.models.log import LogActividad
 from app.enums import LogEventType
+from app.utils.decorators import es_email_educativo
 from app.utils.helpers import get_rate_limit_key
 from app.constants import DEFAULT_AVATAR_PATH
 
@@ -84,8 +85,6 @@ def get_client_info() -> dict:
     Returns:
         dict con ip, user_agent, user_agent_hash y otros metadatos
     """
-    import hashlib
-    
     user_agent = request.headers.get('User-Agent', 'Unknown')
     user_agent_hash = hashlib.sha256(user_agent.encode()).hexdigest()[:16]
     
@@ -145,11 +144,19 @@ def google_callback() -> Response:
     
     if usuario_existente:
         usuario_existente.fecha_ultimo_login = datetime.now(timezone.utc)
+        # Auto-verificar acceso .edu en cada login (por si cambió de correo)
+        if es_email_educativo(email) and not usuario_existente.acceso_edu:
+            usuario_existente.acceso_edu = True
+            logger.info(f"Acceso .edu auto-otorgado a usuario existente")
         # Remediación LOG-001: User-Agent completo con hash para correlación
         log_detalle = f"Login: {email} | IP: {client_info['ip']} | UA_HASH: {client_info['user_agent_hash']}"
     else:
         # Nuevo Usuario: Registrar y crear notificación de bienvenida
         nuevo_usuario = Usuario(email=email, nombre=nombre)
+        # Auto-verificar acceso .edu para nuevos usuarios
+        if es_email_educativo(email):
+            nuevo_usuario.acceso_edu = True
+            logger.info(f"Acceso .edu auto-otorgado a nuevo usuario")
         db.session.add(nuevo_usuario)
         
         bienvenida = Notificacion(

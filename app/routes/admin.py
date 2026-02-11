@@ -199,6 +199,14 @@ def admin():
     
     usuarios_recientes = Usuario.query.order_by(Usuario.fecha_ultimo_login.desc()).limit(5).all()
     
+    # Datos para secciones nuevas
+    from app.models.fuente import FuenteAcademica
+    from app.models.caso import CasoClinico
+    
+    lista_fuentes = FuenteAcademica.get_active().order_by(FuenteAcademica.fecha.desc()).all()
+    lista_casos = CasoClinico.get_active().order_by(CasoClinico.fecha.desc()).all()
+    todos_usuarios = Usuario.query.order_by(Usuario.fecha_registro.desc()).all()
+    
     return render_template('admin.html',
                            mensaje=mensaje,
                            usuario=session['user_name'],
@@ -209,7 +217,10 @@ def admin():
                            logs_pag=logs_pag,
                            usuarios_recientes=usuarios_recientes,
                            total_articulos=len(lista_articulos),
-                           total_categorias=len(LISTA_CATEGORIAS))
+                           total_categorias=len(LISTA_CATEGORIAS),
+                           fuentes=lista_fuentes,
+                           casos=lista_casos,
+                           todos_usuarios=todos_usuarios)
 
 
 @admin_bp.route('/editar/<int:id>', methods=['GET', 'POST'])
@@ -398,3 +409,218 @@ def admin_sincronizar():
     
     db.session.commit()
     return redirect(url_for('admin.admin', mensaje=f"Sincronización: {eliminados} artículos archivados (pueden restaurarse)"))
+
+
+# =============================================================================
+# CRUD DE FUENTES ACADÉMICAS
+# =============================================================================
+
+@admin_bp.route('/fuentes', methods=['POST'])
+@admin_required
+def admin_crear_fuente():
+    """Crear nueva fuente académica."""
+    from app.models.fuente import FuenteAcademica
+    
+    try:
+        titulo = request.form.get('fuente_titulo', '').strip()
+        autor = request.form.get('fuente_autor', '').strip()
+        anio = request.form.get('fuente_anio', '').strip()
+        fuente_origen = request.form.get('fuente_origen', '').strip()
+        tipo = request.form.get('fuente_tipo', 'PDF').strip()
+        doi = request.form.get('fuente_doi', '').strip()
+        url_descarga = request.form.get('fuente_url', '').strip()
+        categoria = request.form.get('fuente_categoria', '').strip()
+        
+        # Validaciones básicas
+        if not titulo or not autor or not anio or not fuente_origen:
+            return redirect(url_for('admin.admin', mensaje="Error: Título, autor, año y fuente son obligatorios."))
+        
+        try:
+            anio_int = int(anio)
+            if anio_int < 1900 or anio_int > 2100:
+                raise ValueError
+        except ValueError:
+            return redirect(url_for('admin.admin', mensaje="Error: Año inválido."))
+        
+        # Validar URLs
+        if url_descarga and not validar_url_segura(url_descarga):
+            return redirect(url_for('admin.admin', mensaje="Error: URL de descarga inválida."))
+        
+        nueva_fuente = FuenteAcademica(
+            titulo=titulo,
+            autor=autor,
+            anio=anio_int,
+            fuente_origen=fuente_origen,
+            tipo=tipo,
+            doi=doi,
+            url_descarga=url_descarga,
+            categoria=categoria
+        )
+        db.session.add(nueva_fuente)
+        db.session.add(LogActividad(tipo_evento=LogEventType.ADMIN, detalle=f"Fuente creada: {titulo}"))
+        db.session.commit()
+        
+        return redirect(url_for('admin.admin', mensaje="¡Fuente académica publicada correctamente!"))
+    
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logger.error(f"Error de BD al crear fuente: {e}", exc_info=True)
+        return redirect(url_for('admin.admin', mensaje="Error de base de datos al crear fuente."))
+
+
+@admin_bp.route('/fuentes/eliminar/<int:id>', methods=['POST'])
+@admin_required
+def admin_eliminar_fuente(id):
+    """Soft delete de fuente académica."""
+    from app.models.fuente import FuenteAcademica
+    
+    fuente = FuenteAcademica.query.get_or_404(id)
+    fuente.soft_delete()
+    db.session.commit()
+    
+    return redirect(url_for('admin.admin', mensaje="Fuente movida a papelera."))
+
+
+# =============================================================================
+# CRUD DE CASOS CLÍNICOS
+# =============================================================================
+
+@admin_bp.route('/casos', methods=['POST'])
+@admin_required  
+def admin_crear_caso():
+    """Crear nuevo caso clínico con upload de HTML."""
+    from app.models.caso import CasoClinico
+    import re
+    
+    ruta_guardado_html = None
+    
+    try:
+        titulo = request.form.get('caso_titulo', '').strip()
+        slug = request.form.get('caso_slug', '').strip()
+        nivel = request.form.get('caso_nivel', 'Intermedio').strip()
+        edad_paciente = request.form.get('caso_edad', '').strip()
+        sexo = request.form.get('caso_sexo', '').strip()
+        sintomatologia = request.form.get('caso_sintomas', '').strip()
+        descripcion = request.form.get('caso_descripcion', '').strip()
+        
+        # Validaciones
+        if not titulo or not slug:
+            return redirect(url_for('admin.admin', mensaje="Error: Título y slug son obligatorios para el caso."))
+        
+        if not validar_slug(slug):
+            return redirect(url_for('admin.admin', mensaje="Error: Slug inválido. Solo letras minúsculas, números y guiones."))
+        
+        # Determinar color del nivel
+        nivel_color_map = {
+            'Principiante': 'emerald',
+            'Intermedio': 'amber',
+            'Avanzado': 'rose'
+        }
+        nivel_color = nivel_color_map.get(nivel, 'amber')
+        
+        # Obtener siguiente número
+        numero = CasoClinico.get_next_number()
+        
+        # Procesar archivo HTML
+        archivo_html = request.files.get('caso_html_file')
+        if not archivo_html or not archivo_html.filename:
+            return redirect(url_for('admin.admin', mensaje="Error: Falta archivo HTML del caso."))
+        
+        # Validar archivo
+        html_valido, html_error = validar_archivo_upload(archivo_html, 'html', requerido=True)
+        if not html_valido:
+            return redirect(url_for('admin.admin', mensaje=html_error))
+        
+        # Guardar HTML
+        nombre_final_html = f"{slug}.html"
+        ruta_guardado_html = os.path.join(carpeta_base, 'templates', 'casos_clinicos', nombre_final_html)
+        os.makedirs(os.path.dirname(ruta_guardado_html), exist_ok=True)
+        
+        contenido_sucio = archivo_html.read().decode('utf-8', errors='ignore')
+        contenido_limpio = limpiar_html_google(contenido_sucio)
+        
+        with open(ruta_guardado_html, 'w', encoding='utf-8') as f:
+            f.write(contenido_limpio)
+        
+        # Registrar en BD
+        nuevo_caso = CasoClinico(
+            titulo=titulo,
+            slug=slug,
+            numero=numero,
+            nivel=nivel,
+            nivel_color=nivel_color,
+            sintomatologia=sintomatologia,
+            edad_paciente=edad_paciente,
+            sexo=sexo,
+            nombre_archivo=nombre_final_html,
+            descripcion=descripcion
+        )
+        db.session.add(nuevo_caso)
+        db.session.add(LogActividad(tipo_evento=LogEventType.ADMIN, detalle=f"Caso creado: {titulo}"))
+        db.session.commit()
+        
+        return redirect(url_for('admin.admin', mensaje="¡Caso clínico publicado correctamente!"))
+    
+    except IntegrityError:
+        db.session.rollback()
+        cleanup_orphan_files(ruta_guardado_html)
+        return redirect(url_for('admin.admin', mensaje="Error: El slug del caso ya existe."))
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        cleanup_orphan_files(ruta_guardado_html)
+        logger.error(f"Error de BD al crear caso: {e}", exc_info=True)
+        return redirect(url_for('admin.admin', mensaje="Error de base de datos al crear caso."))
+    except Exception as e:
+        db.session.rollback()
+        cleanup_orphan_files(ruta_guardado_html)
+        logger.error(f"Error inesperado al crear caso: {e}", exc_info=True)
+        return redirect(url_for('admin.admin', mensaje="Error inesperado al crear caso."))
+
+
+@admin_bp.route('/casos/eliminar/<int:id>', methods=['POST'])
+@admin_required
+def admin_eliminar_caso(id):
+    """Soft delete de caso clínico."""
+    from app.models.caso import CasoClinico
+    
+    caso = CasoClinico.query.get_or_404(id)
+    caso.soft_delete()
+    db.session.commit()
+    
+    return redirect(url_for('admin.admin', mensaje="Caso clínico movido a papelera."))
+
+
+# =============================================================================
+# APROBACIÓN DE ACCESO .EDU
+# =============================================================================
+
+@admin_bp.route('/aprobar-edu/<int:user_id>', methods=['POST'])
+@admin_required
+def admin_aprobar_edu(user_id):
+    """Aprobar acceso educativo manualmente para un usuario."""
+    usuario = Usuario.query.get_or_404(user_id)
+    usuario.acceso_edu = True
+    db.session.add(LogActividad(
+        tipo_evento=LogEventType.ADMIN,
+        detalle=f"Acceso .edu aprobado manualmente: {usuario.email}"
+    ))
+    db.session.commit()
+    logger.info(f"Acceso .edu aprobado manualmente para: {usuario.email}")
+    
+    return redirect(url_for('admin.admin', mensaje=f"Acceso educativo aprobado para {usuario.nombre or usuario.email}."))
+
+
+@admin_bp.route('/revocar-edu/<int:user_id>', methods=['POST'])
+@admin_required
+def admin_revocar_edu(user_id):
+    """Revocar acceso educativo de un usuario."""
+    usuario = Usuario.query.get_or_404(user_id)
+    usuario.acceso_edu = False
+    db.session.add(LogActividad(
+        tipo_evento=LogEventType.ADMIN,
+        detalle=f"Acceso .edu revocado: {usuario.email}"
+    ))
+    db.session.commit()
+    
+    return redirect(url_for('admin.admin', mensaje=f"Acceso educativo revocado para {usuario.nombre or usuario.email}."))
+

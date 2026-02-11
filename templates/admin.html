@@ -19,30 +19,6 @@
         </div>
 
         <div class="admin-header-actions" style="display: flex; gap: 0.75rem; align-items: center;">
-            <!-- Dark Mode Toggle Switch -->
-            <div class="theme-toggle-wrapper btn-dark-admin" style="border: 1px solid var(--border-color);">
-                <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <label class="theme-switch" title="Cambiar tema" aria-label="Cambiar entre modo claro y oscuro">
-                    <input type="checkbox" id="theme-toggle">
-                    <span class="theme-slider"></span>
-                </label>
-                <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-            </div>
-
             <a href="/admin/sincronizar" class="btn-dark-admin" title="Limpiar registros de archivos borrados">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -449,6 +425,267 @@
                         {% else %}
                         <tr id="noResultsRow">
                             <td colspan="3" class="empty-table-msg">No hay artículos publicados aún.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GESTIÓN DE FUENTES ACADÉMICAS ===== -->
+    <div class="admin-section" id="seccion-fuentes">
+        <div class="section-header">
+            <h2 class="section-title">📄 Fuentes Académicas</h2>
+        </div>
+
+        <!-- Formulario de nueva fuente -->
+        <div class="card">
+            <h3 class="card-title">Añadir Fuente</h3>
+            <form action="{{ url_for('admin.admin_crear_fuente') }}" method="POST" class="admin-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fuente_titulo">Título *</label>
+                        <input type="text" id="fuente_titulo" name="fuente_titulo" required maxlength="300">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_autor">Autor *</label>
+                        <input type="text" id="fuente_autor" name="fuente_autor" required maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_anio">Año *</label>
+                        <input type="number" id="fuente_anio" name="fuente_anio" required min="1900" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_origen">Fuente *</label>
+                        <select id="fuente_origen" name="fuente_origen" required>
+                            <option value="PubMed">PubMed</option>
+                            <option value="Scopus">Scopus</option>
+                            <option value="ScienceDirect">ScienceDirect</option>
+                            <option value="APA PsycNet">APA PsycNet</option>
+                            <option value="Google Scholar">Google Scholar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_tipo">Tipo</label>
+                        <select id="fuente_tipo" name="fuente_tipo">
+                            <option value="PDF">PDF</option>
+                            <option value="DOI">DOI</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_doi">DOI</label>
+                        <input type="text" id="fuente_doi" name="fuente_doi" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_url">URL de descarga</label>
+                        <input type="url" id="fuente_url" name="fuente_url" maxlength="500">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuente_categoria">Categoría</label>
+                        <input type="text" id="fuente_categoria" name="fuente_categoria" maxlength="100">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Publicar Fuente</button>
+            </form>
+        </div>
+
+        <!-- Lista de fuentes existentes -->
+        <div class="card mt-4">
+            <h3 class="card-title">Fuentes Publicadas ({{ fuentes|length }})</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Año</th>
+                            <th>Fuente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fuente in fuentes %}
+                        <tr>
+                            <td>{{ fuente.titulo[:50] }}{% if fuente.titulo|length > 50 %}...{% endif %}</td>
+                            <td>{{ fuente.autor[:30] }}{% if fuente.autor|length > 30 %}...{% endif %}</td>
+                            <td>{{ fuente.anio }}</td>
+                            <td>{{ fuente.fuente_origen }}</td>
+                            <td>
+                                <form action="{{ url_for('admin.admin_eliminar_fuente', id=fuente.id) }}" method="POST"
+                                    style="display: inline;" class="delete-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit" class="btn-action-sm btn-delete" title="Eliminar">🗑</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="empty-table-msg">No hay fuentes publicadas aún.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GESTIÓN DE CASOS CLÍNICOS ===== -->
+    <div class="admin-section" id="seccion-casos">
+        <div class="section-header">
+            <h2 class="section-title">🏥 Casos Clínicos</h2>
+        </div>
+
+        <!-- Formulario de nuevo caso -->
+        <div class="card">
+            <h3 class="card-title">Añadir Caso Clínico</h3>
+            <form action="{{ url_for('admin.admin_crear_caso') }}" method="POST" enctype="multipart/form-data"
+                class="admin-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="caso_titulo">Título *</label>
+                        <input type="text" id="caso_titulo" name="caso_titulo" required maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label for="caso_slug">Slug *</label>
+                        <input type="text" id="caso_slug" name="caso_slug" required maxlength="200"
+                            pattern="[a-z0-9\-]+" title="Solo letras minúsculas, números y guiones">
+                    </div>
+                    <div class="form-group">
+                        <label for="caso_nivel">Nivel</label>
+                        <select id="caso_nivel" name="caso_nivel">
+                            <option value="Principiante">🌱 Principiante</option>
+                            <option value="Intermedio" selected>⚡ Intermedio</option>
+                            <option value="Avanzado">🔥 Avanzado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="caso_edad">Edad del Paciente</label>
+                        <input type="text" id="caso_edad" name="caso_edad" maxlength="50" placeholder="Ej: 28 años">
+                    </div>
+                    <div class="form-group">
+                        <label for="caso_sexo">Sexo</label>
+                        <select id="caso_sexo" name="caso_sexo">
+                            <option value="Femenino">Femenino</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="caso_sintomas">Sintomatología (separar con |)</label>
+                        <input type="text" id="caso_sintomas" name="caso_sintomas"
+                            placeholder="Síntoma 1 | Síntoma 2 | Síntoma 3">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="caso_descripcion">Descripción breve</label>
+                        <textarea id="caso_descripcion" name="caso_descripcion" rows="2" maxlength="300"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="caso_html_file">Archivo HTML del caso *</label>
+                        <input type="file" id="caso_html_file" name="caso_html_file" accept=".html" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Publicar Caso</button>
+            </form>
+        </div>
+
+        <!-- Lista de casos existentes -->
+        <div class="card mt-4">
+            <h3 class="card-title">Casos Publicados ({{ casos|length }})</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Título</th>
+                            <th>Nivel</th>
+                            <th>Paciente</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for caso in casos %}
+                        <tr>
+                            <td>{{ caso.numero }}</td>
+                            <td>{{ caso.titulo[:50] }}{% if caso.titulo|length > 50 %}...{% endif %}</td>
+                            <td>
+                                <span class="badge badge-{{ caso.nivel_color }}">{{ caso.nivel }}</span>
+                            </td>
+                            <td>{{ caso.edad_paciente or 'N/A' }}</td>
+                            <td>
+                                <form action="{{ url_for('admin.admin_eliminar_caso', id=caso.id) }}" method="POST"
+                                    style="display: inline;" class="delete-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit" class="btn-action-sm btn-delete" title="Eliminar">🗑</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="empty-table-msg">No hay casos publicados aún.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GESTIÓN DE ACCESO .EDU ===== -->
+    <div class="admin-section" id="seccion-edu">
+        <div class="section-header">
+            <h2 class="section-title">🎓 Acceso Educativo (.edu)</h2>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Gestión de Usuarios ({{ todos_usuarios|length }})</h3>
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Acceso .edu</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in todos_usuarios %}
+                        <tr>
+                            <td>{{ u.nombre or 'Sin nombre' }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>
+                                {% if u.acceso_edu %}
+                                <span class="badge badge-emerald">✓ Verificado</span>
+                                {% else %}
+                                <span class="badge badge-rose">✗ Sin acceso</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.acceso_edu %}
+                                <form action="{{ url_for('admin.admin_revocar_edu', user_id=u.id) }}" method="POST"
+                                    style="display: inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit" class="btn-action-sm btn-delete" title="Revocar acceso">
+                                        Revocar
+                                    </button>
+                                </form>
+                                {% else %}
+                                <form action="{{ url_for('admin.admin_aprobar_edu', user_id=u.id) }}" method="POST"
+                                    style="display: inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit" class="btn-action-sm btn-edit" title="Aprobar acceso">
+                                        Aprobar
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="empty-table-msg">No hay usuarios registrados.</td>
                         </tr>
                         {% endfor %}
                     </tbody>

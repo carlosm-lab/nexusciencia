@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+
+{% block title %}Acceso Restringido — NexusCiencia{% endblock %}
+{% block meta_description %}Acceso exclusivo para estudiantes universitarios verificados.{% endblock %}
+
+{% block content %}
+<div class="edu-access-container">
+    <div class="edu-access-card">
+        <div class="edu-lock-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </div>
+
+        <h1 class="edu-title">Acceso Exclusivo Universitario</h1>
+        <p class="edu-subtitle">
+            Este contenido está reservado para estudiantes e investigadores
+            con correo institucional verificado (<code>.edu</code>).
+        </p>
+
+        <div class="edu-steps">
+            <div class="edu-step">
+                <div class="edu-step-number">1</div>
+                <div class="edu-step-content">
+                    <h3>Inicia sesión con tu correo .edu</h3>
+                    <p>Utiliza tu cuenta de Google institucional (correo terminado en <code>.edu</code>,
+                        <code>.edu.mx</code>, <code>.edu.es</code>, etc.) para obtener acceso automático.
+                    </p>
+                </div>
+            </div>
+
+            <div class="edu-step">
+                <div class="edu-step-number">2</div>
+                <div class="edu-step-content">
+                    <h3>¿No tienes correo .edu?</h3>
+                    <p>Si eres estudiante universitario pero usas un correo personal,
+                        puedes solicitar acceso contactando al administrador.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="edu-actions">
+            {% if not session.get('user_email') %}
+            <a href="{{ url_for('auth.login') }}" class="edu-btn edu-btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                Iniciar Sesión con Google
+            </a>
+            {% endif %}
+            <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}" class="edu-btn edu-btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Contactar Administrador
+            </a>
+            <a href="{{ url_for('main.inicio') }}" class="edu-btn edu-btn-ghost">
+                ← Volver al Inicio
+            </a>
+        </div>
+
+        <div class="edu-info-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <p>
+                NexusCiencia protege sus recursos académicos para garantizar el uso responsable
+                del contenido educativo. Tu privacidad está protegida en todo momento.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .edu-access-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 2rem 1rem;
+    }
+
+    .edu-access-card {
+        background: var(--bg-card, #1a1a2e);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+        border-radius: 20px;
+        padding: 3rem;
+        max-width: 560px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .edu-lock-icon {
+        color: var(--accent-color, #f59e0b);
+        margin-bottom: 1.5rem;
+        animation: lockPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes lockPulse {
+
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+    }
+
+    .edu-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary, #fff);
+        margin-bottom: 0.75rem;
+    }
+
+    .edu-subtitle {
+        color: var(--text-secondary, #a0a0b0);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .edu-subtitle code {
+        background: rgba(59, 130, 246, 0.15);
+        color: var(--accent-color, #3B82F6);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+
+    .edu-steps {
+        text-align: left;
+        margin-bottom: 2rem;
+    }
+
+    .edu-step {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .edu-step-number {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .edu-step-content h3 {
+        color: var(--text-primary, #fff);
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+    }
+
+    .edu-step-content p {
+        color: var(--text-secondary, #a0a0b0);
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .edu-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .edu-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .edu-btn-primary {
+        background: linear-gradient(135deg, #3B82F6, #2563EB);
+        color: #fff;
+        border: none;
+    }
+
+    .edu-btn-primary:hover {
+        background: linear-gradient(135deg, #2563EB, #1D4ED8);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .edu-btn-secondary {
+        background: transparent;
+        color: var(--text-primary, #fff);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+    }
+
+    .edu-btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .edu-btn-ghost {
+        background: transparent;
+        color: var(--text-secondary, #a0a0b0);
+        border: none;
+        font-size: 0.85rem;
+    }
+
+    .edu-btn-ghost:hover {
+        color: var(--text-primary, #fff);
+    }
+
+    .edu-info-box {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: rgba(59, 130, 246, 0.08);
+        border-radius: 12px;
+        border: 1px solid rgba(59, 130, 246, 0.15);
+        text-align: left;
+    }
+
+    .edu-info-box svg {
+        flex-shrink: 0;
+        color: #3B82F6;
+        margin-top: 2px;
+    }
+
+    .edu-info-box p {
+        color: var(--text-secondary, #a0a0b0);
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    @media (max-width: 576px) {
+        .edu-access-card {
+            padding: 2rem 1.5rem;
+        }
+
+        .edu-title {
+            font-size: 1.35rem;
+        }
+    }
+</style>
+{% endblock %}

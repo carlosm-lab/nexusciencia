@@ -3,7 +3,7 @@
 {% block title %}Categorías | NexusCiencia{% endblock %}
 
 {% block description %}Explora las {{ total_categorias }} áreas de estudio en psicología disponibles en NexusCiencia.
-Encuentra artículos científicos organizados por categoría.{% endblock %}
+Encuentra artículos educativos organizados por categoría.{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
@@ -128,7 +128,7 @@ Encuentra artículos científicos organizados por categoría.{% endblock %}
 {% else %}
 
 <!-- H1 accesible para SEO (Auditoría 3.5) -->
-<h1 class="visually-hidden">Categorías de Psicología Científica - NexusCiencia</h1>
+<h1 class="visually-hidden">Categorías de Psicología Educativa - NexusCiencia</h1>
 
 <div class="d-block d-md-none mobile-search-container">
     <form action="{{ url_for('main.categorias') }}" method="get" class="mobile-search-form">
@@ -215,7 +215,7 @@ Encuentra artículos científicos organizados por categoría.{% endblock %}
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Categorías de Psicología",
-    "description": "Explora {{ total_categorias }} áreas de estudio en psicología científica disponibles en NexusCiencia",
+    "description": "Explora {{ total_categorias }} áreas de estudio en psicología educativa disponibles en NexusCiencia",
     "url": "{{ request.url_root.rstrip('/') }}{{ url_for('main.categorias') }}",
     "breadcrumb": {
         "@type": "BreadcrumbList",

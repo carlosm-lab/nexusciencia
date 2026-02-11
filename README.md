@@ -1,4 +1,4 @@
-# NexusCiencia - Repositorio de Artículos Científicos
+# NexusCiencia - Repositorio de Artículos Educativos
 
 [![Tests](https://img.shields.io/badge/tests-11%2F11%20passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/python-3.11+-blue)]()
@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green)]()
 [![Quality](https://img.shields.io/badge/quality-10%2B%2F10-gold)]()
 
-Plataforma web para gestión y visualización de artículos científicos de psicología con sistema de autenticación OAuth, biblioteca personal y panel de administración.
+Plataforma web para gestión y visualización de artículos educativos de psicología con sistema de autenticación OAuth, biblioteca personal y panel de administración.
 
 ---
 

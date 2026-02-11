@@ -1,6 +1,6 @@
 """
-CLI Commands for NexusCiencia
-Flask CLI integration for administrative tasks
+Comandos CLI para NexusCiencia
+Integración Flask CLI para tareas de administración
 """
 
 import os
@@ -10,7 +10,7 @@ from flask.cli import with_appcontext
 
 
 def init_app(app):
-    """Register CLI commands with the Flask app"""
+    """Registra los comandos CLI con la aplicación Flask."""
     app.cli.add_command(logs_cli)
 
 

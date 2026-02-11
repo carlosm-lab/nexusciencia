@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}Caso #{{ caso.numero }}: {{ caso.titulo }} — NexusCiencia{% endblock %}
+{% block meta_description %}{{ caso.descripcion or caso.titulo }}{% endblock %}
+
+{% block styles %}
+<style>
+    .caso-detalle-hero {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.06));
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .caso-detalle-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+    }
+
+    .badge-emerald {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10B981;
+    }
+
+    .badge-amber {
+        background: rgba(245, 158, 11, 0.15);
+        color: #F59E0B;
+    }
+
+    .badge-rose {
+        background: rgba(244, 63, 94, 0.15);
+        color: #F43F5E;
+    }
+
+    .caso-detalle-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary, #fff);
+        margin-bottom: 1rem;
+    }
+
+    .caso-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .caso-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .caso-meta-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted, #666);
+        font-weight: 600;
+    }
+
+    .caso-meta-value {
+        font-size: 0.95rem;
+        color: var(--text-primary, #fff);
+        font-weight: 500;
+    }
+
+    .caso-sintomas-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .caso-sintoma-tag {
+        padding: 0.3rem 0.75rem;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: var(--text-secondary, #bbb);
+    }
+
+    .caso-contenido {
+        background: var(--bg-card, #1a1a2e);
+        border: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+        border-radius: 16px;
+        padding: 2.5rem;
+        line-height: 1.8;
+        color: var(--text-primary, #e0e0e0);
+    }
+
+    .caso-contenido h1,
+    .caso-contenido h2,
+    .caso-contenido h3 {
+        color: var(--text-primary, #fff);
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .caso-contenido p {
+        margin-bottom: 1em;
+    }
+
+    .caso-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary, #a0a0b0);
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        transition: color 0.2s;
+    }
+
+    .caso-back-link:hover {
+        color: var(--accent-color, #3B82F6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" {% if acceso_bloqueado %}style="filter:blur(6px);pointer-events:none;user-select:none;" {%
+    endif %}>
+    <a href="{{ url_for('main.casos_clinicos') }}" class="caso-back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Volver a Casos Clínicos
+    </a>
+
+    <div class="caso-detalle-hero">
+        <span class="caso-detalle-badge badge-{{ caso.nivel_color }}">
+            Caso #{{ caso.numero }} · {{ caso.nivel }}
+        </span>
+
+        <h1 class="caso-detalle-title">{{ caso.titulo }}</h1>
+
+        <div class="caso-meta-grid">
+            {% if caso.edad_paciente %}
+            <div class="caso-meta-item">
+                <span class="caso-meta-label">Edad del Paciente</span>
+                <span class="caso-meta-value">{{ caso.edad_paciente }}</span>
+            </div>
+            {% endif %}
+            {% if caso.sexo %}
+            <div class="caso-meta-item">
+                <span class="caso-meta-label">Sexo</span>
+                <span class="caso-meta-value">{{ caso.sexo }}</span>
+            </div>
+            {% endif %}
+            <div class="caso-meta-item">
+                <span class="caso-meta-label">Fecha</span>
+                <span class="caso-meta-value">{{ caso.fecha.strftime('%d/%m/%Y') if caso.fecha else 'N/A' }}</span>
+            </div>
+        </div>
+
+        {% if caso.get_sintomas_lista() %}
+        <div class="caso-meta-item">
+            <span class="caso-meta-label">Sintomatología</span>
+            <div class="caso-sintomas-list">
+                {% for sintoma in caso.get_sintomas_lista() %}
+                <span class="caso-sintoma-tag">{{ sintoma }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="caso-contenido">
+        {{ contenido_html|safe }}
+    </div>
+</div>
+
+{% if acceso_bloqueado %}
+<!-- Modal: Caso Clínico requiere correo .edu -->
+<div
+    style="position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,0.55);backdrop-filter:blur(4px);">
+    <div
+        style="background:var(--bg-card, #fff);border-radius:var(--radius, 12px);max-width:440px;width:90%;box-shadow:var(--shadow-soft, 0 4px 20px rgba(0,0,0,0.05));overflow:hidden;">
+        <!-- Header -->
+        <div style="background:var(--bg-app, #0F172A);padding:28px 30px;text-align:center;">
+            <div
+                style="width:56px;height:56px;border-radius:50%;background:var(--accent, #3B82F6);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                    <path
+                        d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z">
+                    </path>
+                    <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                    <path d="M20 9v6"></path>
+                </svg>
+            </div>
+            <h3 style="font-family:'Inter',sans-serif;font-weight:800;font-size:1.25rem;color:#fff;margin:0;">Recurso
+                Académico Exclusivo</h3>
+        </div>
+        <!-- Body -->
+        <div style="padding:28px 30px;text-align:center;">
+            {% if tipo_usuario == 2 %}
+            {# Tipo 2: correo personal — cerrar sesión e iniciar con .edu #}
+            <p style="color:var(--text-secondary, #64748B);font-size:0.95rem;line-height:1.65;margin-bottom:16px;">
+                Los <strong style="color:var(--text-primary, #1E293B);">Casos Clínicos</strong> son un recurso exclusivo
+                para usuarios académicos.
+                Para acceder, debes cerrar sesión e iniciar con un <strong
+                    style="color:var(--text-primary, #1E293B);">correo institucional (.edu)</strong>.
+            </p>
+            <p style="color:var(--text-muted, #94A3B8);font-size:0.85rem;line-height:1.5;margin-bottom:24px;">
+                Si no posees correo .edu, puedes contactar al administrador para verificación manual.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <a href="{{ url_for('auth.logout') }}"
+                    style="display:block;padding:12px 24px;background:var(--accent, #3B82F6);color:#fff;border-radius:var(--radius, 12px);font-weight:700;font-size:0.95rem;text-decoration:none;">
+                    Cerrar Sesión
+                </a>
+                <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}"
+                    style="display:block;padding:12px 24px;border:1px solid var(--border, #E2E8F0);color:var(--text-secondary, #64748B);border-radius:var(--radius, 12px);font-weight:600;font-size:0.95rem;text-decoration:none;">
+                    Contactar Administrador
+                </a>
+            </div>
+            {% else %}
+            {# Tipo 1: sin sesión — registrarse con .edu #}
+            <p style="color:var(--text-secondary, #64748B);font-size:0.95rem;line-height:1.65;margin-bottom:16px;">
+                Los <strong style="color:var(--text-primary, #1E293B);">Casos Clínicos</strong> son un recurso exclusivo
+                para usuarios académicos.
+                Debes registrarte con un <strong style="color:var(--text-primary, #1E293B);">correo institucional
+                    (.edu)</strong>.
+            </p>
+            <p style="color:var(--text-muted, #94A3B8);font-size:0.85rem;line-height:1.5;margin-bottom:24px;">
+                Si no posees correo .edu, puedes contactar al administrador para verificación manual.
+            </p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <a href="{{ url_for('auth.login') }}"
+                    style="display:block;padding:12px 24px;background:var(--accent, #3B82F6);color:#fff;border-radius:var(--radius, 12px);font-weight:700;font-size:0.95rem;text-decoration:none;">
+                    Registrarse con correo .edu
+                </a>
+                <a href="{{ url_for('pages.pagina_estatica', pagina='contacto') }}"
+                    style="display:block;padding:12px 24px;border:1px solid var(--border, #E2E8F0);color:var(--text-secondary, #64748B);border-radius:var(--radius, 12px);font-weight:600;font-size:0.95rem;text-decoration:none;">
+                    Contactar Administrador
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        <!-- Footer -->
+        <div
+            style="background:var(--bg-body, #f8fafc);border-top:1px solid var(--border, #E2E8F0);padding:14px;text-align:center;">
+            <a href="{{ url_for('main.casos_clinicos') }}"
+                style="color:var(--text-secondary, #64748B);font-size:0.875rem;text-decoration:none;">
+                Volver a Casos Clínicos
+            </a>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

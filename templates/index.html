@@ -2,7 +2,7 @@
 
 {% block title %}NexusCiencia | Biblioteca de Psicología Basada en Evidencia{% endblock %}
 
-{% block description %}Accede a {{ total_articulos }}+ artículos científicos de psicología y neurociencia. Biblioteca
+{% block description %}Accede a {{ total_articulos }}+ artículos educativos de psicología y neurociencia. Biblioteca
 gratuita con {{ total_categorias }} áreas especializadas. Contenido basado en evidencia para profesionales, estudiantes
 e investigadores.{% endblock %}
 
@@ -54,8 +54,8 @@ e investigadores.{% endblock %}
             radial-gradient(at 10% 29%, rgba(99, 102, 241, 0.12) 0px, transparent 50%);
     }
 
-    /* Scientific Dot Pattern */
-    .scientific-dots {
+    /* Academic Dot Pattern */
+    .academic-dots {
         background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1' fill='%23cbd5e1' fill-opacity='0.5'/%3E%3C/svg%3E");
     }
 
@@ -136,7 +136,7 @@ e investigadores.{% endblock %}
     "@type": "WebSite",
     "name": "NexusCiencia",
     "alternateName": "Nexus Ciencia",
-    "description": "Biblioteca digital de artículos científicos de psicología y neurociencia basados en evidencia",
+    "description": "Biblioteca digital de artículos educativos de psicología y neurociencia basados en evidencia",
     "url": "{{ request.url_root }}",
     "potentialAction": {
         "@type": "SearchAction",
@@ -159,7 +159,7 @@ e investigadores.{% endblock %}
 <div class="min-h-screen font-sans">
 
     <!-- ===== HERO SECTION - PREMIUM ===== -->
-    <section class="relative hero-mesh scientific-dots px-4 pt-20 pb-28 sm:px-6 lg:px-8 overflow-hidden">
+    <section class="relative hero-mesh academic-dots px-4 pt-20 pb-28 sm:px-6 lg:px-8 overflow-hidden">
 
         <!-- Decorative blurs -->
         <div class="absolute top-20 left-10 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl pointer-events-none">
@@ -192,7 +192,7 @@ e investigadores.{% endblock %}
                 Biblioteca de<br class="hidden sm:block">
                 <span
                     class="keyword-underline bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text text-transparent">
-                    Psicología Científica
+                    Psicología Educativa
                 </span>
             </h1>
 
@@ -204,7 +204,7 @@ e investigadores.{% endblock %}
                     clínica</span>,
                 <span class="font-semibold text-slate-800 bg-primary-50 px-1.5 py-0.5 rounded">conducta humana</span> y
                 más.
-                Contenido gratuito basado en evidencia científica.
+                Contenido gratuito basado en evidencia académica.
             </p>
 
             <!-- CTAs Duales -->
@@ -522,7 +522,7 @@ e investigadores.{% endblock %}
                     </div>
                     <h3 class="relative mb-2 text-lg font-bold text-slate-900">Acceso 100% Gratuito</h3>
                     <p class="relative text-sm text-slate-600 leading-relaxed">
-                        Sin suscripciones, sin paywalls. Todo el contenido científico disponible de forma libre.
+                        Sin suscripciones, sin paywalls. Todo el contenido educativo disponible de forma libre.
                     </p>
                 </div>
 
@@ -592,7 +592,7 @@ e investigadores.{% endblock %}
     <section class="relative px-4 py-28 sm:px-6 lg:px-8 overflow-hidden">
 
         <!-- Background decoration -->
-        <div class="absolute inset-0 hero-mesh scientific-dots pointer-events-none"></div>
+        <div class="absolute inset-0 hero-mesh academic-dots pointer-events-none"></div>
         <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/10 rounded-full blur-3xl pointer-events-none">
         </div>
@@ -603,7 +603,7 @@ e investigadores.{% endblock %}
             </h2>
             <p class="mt-6 text-lg text-slate-600 leading-relaxed">
                 Únete a miles de profesionales y estudiantes que confían en NexusCiencia para acceder a contenido
-                científico de calidad.
+                educativo de calidad.
             </p>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
                 <a href="{{ url_for('main.categorias') }}"
