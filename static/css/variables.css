@@ -7,42 +7,56 @@
    NO usar @import aquí ya que bloquea el renderizado del CSS. */
 
 :root {
-    /* ----------------------------------------------------------------------
-       1. PALETA DE COLORES (SISTEMA VISUAL)
-       ---------------------------------------------------------------------- */
+    /* ======================================================================
+       SISTEMA DE COLORES 60-30-10
+       60% Primario (Slate): fondos, cards, textos, bordes
+       30% Secundario (Slate oscuro): sidebar, headers, hero, gradientes
+       10% Acento (Azul): CTAs, links, badges, estados activos
+       ====================================================================== */
 
-    /* -- Fondos y Superficies -- */
+    /* ----------------------------------------------------------------------
+       1. PRIMARIO 60% — Familia Slate (fondos y superficies)
+       ---------------------------------------------------------------------- */
     --bg-app: #0F172A;
-    /* Azul Pizarra Oscuro */
     --bg-body: #f8fafc;
-    /* Slate-50 (Tailwind) */
     --bg-card: #ffffff;
-    /* Blanco Puro */
+    --bg-primary: #ffffff;
+    --bg-secondary: #F8FAFC;
 
     /* -- Tipografía y Contenido -- */
     --text-primary: #1E293B;
-    /* Slate 800 */
     --text-secondary: #64748B;
-    /* Slate 500 */
     --text-muted: #94A3B8;
-    /* Slate 400 */
-
-    /* -- Colores de Acción y Estado -- */
-    --accent: #3B82F6;
-    /* Azul Brillante */
-    --success: #10B981;
-    /* Verde Esmeralda */
-    --danger: #EF4444;
-    /* Rojo Intenso */
 
     /* -- Bordes y Separadores -- */
     --border: #E2E8F0;
     --border-light: #F1F5F9;
+    --border-color: #E2E8F0;
 
     /* ----------------------------------------------------------------------
-       2. VARIABLES DE DISEÑO Y LAYOUT
+       2. SECUNDARIO 30% — Slate Oscuro (headers, hero, sidebar)
        ---------------------------------------------------------------------- */
+    --primary-color: #0F172A;
+    --primary-rgb: 15, 23, 42;
+    --primary-gradient-start: #0F172A;
+    --primary-gradient-end: #334155;
 
+    /* ----------------------------------------------------------------------
+       3. ACENTO 10% — Azul Brillante (CTAs, links, estados activos)
+       ---------------------------------------------------------------------- */
+    --accent: #3B82F6;
+    --accent-color: #3B82F6;
+    --accent-hover: #2563EB;
+    --accent-light: #EFF6FF;
+    --accent-rgb: 59, 130, 246;
+
+    /* -- Colores Semánticos (estado) -- */
+    --success: #10B981;
+    --danger: #EF4444;
+
+    /* ----------------------------------------------------------------------
+       4. VARIABLES DE DISEÑO Y LAYOUT
+       ---------------------------------------------------------------------- */
     --radius: 12px;
     --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
 
@@ -50,11 +64,9 @@
     --sidebar-mini: 88px;
     --spacing-padding: 40px;
 
-    /* -- Variables de Sidebar (usadas en layout.css) -- */
-    --sidebar-bg: #0F172A;
+    /* -- Variables de Sidebar -- */
+    --sidebar-bg: var(--bg-app);
     --sidebar-hover: rgba(255, 255, 255, 0.08);
-    --accent-color: #3B82F6;
-    --border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* --------------------------------------------------------------------------

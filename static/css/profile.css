@@ -343,8 +343,8 @@
 }
 
 .mailbox-icon-wrapper {
-    background: #F3E8FF;
-    color: #9333EA;
+    background: #DBEAFE;
+    color: var(--accent, #3B82F6);
     width: 40px;
     height: 40px;
     border-radius: 10px;

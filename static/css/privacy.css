@@ -18,14 +18,14 @@
     border-radius: 20px;
     min-height: 200px;
     padding: 40px;
-    
+
     /* Flexbox para alineación */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
     text-align: left;
-    
+
     color: white;
     overflow: hidden;
     margin-bottom: 40px;
@@ -46,8 +46,13 @@
 }
 
 @keyframes rotateBg {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .about-hero-content {
@@ -93,7 +98,7 @@
 .legal-container {
     /* CAMBIO CLAVE: Override para eliminar límites de ancho */
     width: 100%;
-    max-width: none; 
+    max-width: none;
     margin-bottom: 60px;
 }
 
@@ -123,19 +128,20 @@
     border-radius: 24px;
     padding: 40px;
     margin-bottom: 30px;
-    
+
     /* Borde distintivo punteado (Estilo "Documento de Archivo") */
-    border: 2px dashed #CBD5E1; 
-    
+    border: 2px dashed #CBD5E1;
+
     box-shadow: none;
     width: 100%;
-    
+
     /* Transición suave para interacción */
     transition: border-color 0.3s ease;
 }
 
 .legal-card:hover {
-    border-color: #3B82F6; /* Resalte azul al pasar el mouse */
+    border-color: #3B82F6;
+    /* Resalte azul al pasar el mouse */
 }
 
 .legal-heading {
@@ -148,7 +154,7 @@
 }
 
 .legal-card p {
-    color: #4B5563;
+    color: #475569;
     line-height: 1.8;
     font-size: 1rem;
     margin-bottom: 15px;
@@ -157,7 +163,8 @@
 /* Tarjeta Destacada (Ej: Sección de Google) */
 .highlight-card {
     background: #F8FAFC;
-    border-color: #BFDBFE; /* Borde azul claro por defecto */
+    border-color: #BFDBFE;
+    /* Borde azul claro por defecto */
     border-style: dashed;
 }
 
@@ -184,14 +191,15 @@
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    
+
     /* Centrado del emoji/icono */
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     font-size: 1.2rem;
-    flex-shrink: 0; /* Evita que el icono se aplaste */
+    flex-shrink: 0;
+    /* Evita que el icono se aplaste */
 }
 
 /* --------------------------------------------------------------------------
@@ -201,7 +209,8 @@
 .contact-box {
     text-align: center;
     padding: 40px;
-    background: #0F172A; /* Fondo oscuro */
+    background: #0F172A;
+    /* Fondo oscuro */
     border-radius: 20px;
     color: white;
     margin-top: 50px;
@@ -238,6 +247,7 @@
    -------------------------------------------------------------------------- */
 
 @media (max-width: 768px) {
+
     /* Ajustes del Hero */
     .about-hero {
         padding: 30px 20px;

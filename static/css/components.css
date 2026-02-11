@@ -39,11 +39,11 @@
 }
 
 .pagination-nexus .page-item.active .page-link {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--accent, #3B82F6);
     border: none;
     color: white;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb, 59, 130, 246), 0.3);
 }
 
 .pagination-nexus .page-item.disabled .page-link {
@@ -81,7 +81,7 @@
     width: 80px;
     height: 80px;
     margin: 0 auto 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--accent, #3B82F6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -115,7 +115,7 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--accent, #3B82F6);
     color: white;
     border-radius: 8px;
     font-weight: 500;
@@ -125,7 +125,7 @@
 
 .empty-state-action:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb, 59, 130, 246), 0.3);
     color: white;
 }
 

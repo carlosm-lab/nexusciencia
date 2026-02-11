@@ -154,8 +154,8 @@
 }
 
 .icon-purple {
-    background: #F5F3FF;
-    color: #8B5CF6;
+    background: var(--accent-light, #EFF6FF);
+    color: var(--accent, #3B82F6);
 }
 
 .icon-green {
@@ -232,7 +232,7 @@
 }
 
 .mod-purple {
-    background: #F5F3FF;
+    background: #DBEAFE;
 }
 
 .mod-green {
@@ -373,7 +373,7 @@
 }
 
 .cover-purple {
-    background: linear-gradient(135deg, #581c87 0%, #a855f7 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
     color: white;
 }
 
@@ -466,8 +466,8 @@
 }
 
 .action-play:hover {
-    background: #F5F3FF;
-    color: #8B5CF6;
+    background: var(--accent-light, #EFF6FF);
+    color: var(--accent, #3B82F6);
 }
 
 .action-pdf:hover {
