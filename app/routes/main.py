@@ -505,3 +505,19 @@ def ver_caso(slug: str) -> str:
                            acceso_bloqueado=acceso_bloqueado,
                            tipo_usuario=tipo_usuario)
 
+
+@main_bp.route('/recursos')
+@limiter.limit("30 per minute", key_func=get_rate_limit_key)
+def recursos_institucionales() -> str:
+    """
+    Recursos Institucionales.
+    
+    Acceso: Solo Tipo 4 (correo @ieproes.edu.sv o admin).
+    Tipos 1, 2 y 3 → contenido difuminado + modal contextual.
+    """
+    tipo_usuario = _determinar_tipo_usuario()
+    acceso_bloqueado = tipo_usuario < 4  # Solo tipo 4 tiene acceso
+    
+    return render_template('recursos.html',
+                           acceso_bloqueado=acceso_bloqueado,
+                           tipo_usuario=tipo_usuario)

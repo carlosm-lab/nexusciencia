@@ -341,11 +341,17 @@ def register_context_processors(app):
             user = Usuario.query.filter_by(email=session['user_email']).first()
             tiene_acceso_edu = user.acceso_edu if user else False
         
+        # Verificar si es correo @ieproes.edu.sv (acceso a Recursos)
+        es_ieproes = es_admin  # Admin siempre tiene acceso
+        if not es_ieproes and 'user_email' in session:
+            es_ieproes = session['user_email'].strip().lower().endswith('@ieproes.edu.sv')
+        
         return dict(
             todas_las_categorias=todas_las_categorias,
             es_admin=es_admin,
             get_category_slug=get_category_slug,  # Nueva función para URLs jerárquicas
-            tiene_acceso_edu=tiene_acceso_edu  # Acceso educativo verificado
+            tiene_acceso_edu=tiene_acceso_edu,  # Acceso educativo verificado
+            es_ieproes=es_ieproes  # Acceso a recursos institucionales
         )
 
 
