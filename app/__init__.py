@@ -240,6 +240,14 @@ def configure_assets(app):
     )
     assets.register('css_article', css_article)
     
+    # Bundle CSS específico para Homepage
+    css_home = Bundle(
+        'css/home.css',
+        filters='cssmin',
+        output='gen/home.min.css'
+    )
+    assets.register('css_home', css_home)
+    
     # JS Bundles
     js_main = Bundle('js/main.js', filters='jsmin', output='gen/main.min.js')
     js_dashboard = Bundle('js/dashboard.js', filters='jsmin', output='gen/dashboard.min.js')
